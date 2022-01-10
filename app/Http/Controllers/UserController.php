@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRegistrationRequest;
-use App\Http\Services\UserService;
+use App\Requests\UserRegistrationRequest;
+use App\Services\UserService;
 use Exception;
 
 class UserController extends Controller

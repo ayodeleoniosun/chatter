@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -28,7 +28,7 @@ class UserRegistrationRequest extends FormRequest
             'last_name' => 'required|string',
             'email_address' => 'required|email|unique:users|string',
             'password' => 'required|string|min:6',
-            'phone_number' => 'required|string|min:10|max:15'
+            'phone_number' => 'required|string|min:10|max:15|unique:users'
         ];
     }
 
