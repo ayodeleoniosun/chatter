@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Http\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class File extends Model
+{
+
+    protected $table = 'files';
+
+    protected $fillable = ['filename'];
+
+    public function chat()
+    {
+        return $this->hasOne(Chat::class, 'file_id');
+    }
+}
