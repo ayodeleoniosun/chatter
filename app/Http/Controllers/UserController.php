@@ -20,17 +20,13 @@ class UserController extends Controller
     {
         try {
             $user = $this->userService->register($request->all());
-            
-            $response = array(
+            return response()->json([
                 "status" => "success",
                 "message" => "Registration successful",
-                "data" => $user,
-            );
-
-            return response()->json($response, 201);
+                "data" => $user
+            ], 201);
         } catch (Exception $e) {
-            $response = array("status" => "error", "message" => $e->getMessage());
-            return response()->json($response, $e->getStatusCode());
+            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
         }
     }
 
@@ -38,32 +34,22 @@ class UserController extends Controller
     {
         try {
             $data = $this->userService->login($request->all());
-            
-            $response = array(
+            return response()->json([
                 "status" => "success",
                 "message" => "Login successful",
-                "data" => $data,
-            );
-
-            return response()->json($response, 200);
+                "data" => $data
+            ], 200);
         } catch (Exception $e) {
-            $response = array("status" => "error", "message" => $e->getMessage());
-            return response()->json($response, $e->getStatusCode());
+            return response()->json(["status" => "error", "message" => $e->getMessage()]);
         }
     }
 
     public function profile(Request $request)
     {
         try {
-            $response = array(
-                "status" => "success",
-                "data" => $request->user(),
-            );
-
-            return response()->json($response, 200);
+            return response()->json(["status" => "success", "data" => $request->user()], 200);
         } catch (Exception $e) {
-            $response = array("status" => "error", "message" => $e->getMessage());
-            return response()->json($response, $e->getStatusCode());
+            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
         }
     }
 
@@ -71,17 +57,13 @@ class UserController extends Controller
     {
         try {
             $data = $this->userService->updateProfile($request->all(), $request->user()->id);
-            
-            $response = array(
+            return response()->json([
                 "status" => "success",
                 "message" => "Profile successfully updated",
-                "data" => $data,
-            );
-
-            return response()->json($response, 200);
+                "data" => $data
+            ], 200);
         } catch (Exception $e) {
-            $response = array("status" => "error", "message" => $e->getMessage());
-            return response()->json($response, $e->getStatusCode());
+            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
         }
     }
 }
