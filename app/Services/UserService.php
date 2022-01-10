@@ -36,4 +36,9 @@ class UserService
             'token' => $token
         ];
     }
+
+    public function profile(User $user)
+    {
+        return $user;
+    }
 }

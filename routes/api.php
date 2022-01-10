@@ -13,10 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'accounts'],
+Route::group(
+    ['prefix' => 'accounts'],
     function () {
         Route::post('/register', 'UserController@register')->name('account.register');
         Route::post('/login', 'UserController@login')->name('account.login');
         Route::post('/password/reset', 'UserController@resetPassword')->name('account.password.reset');
         Route::post('/invite', 'UserController@inviteUser')->name('account.invite');
-    });
+    }
+);
+
+Route::group(['prefix' => 'users', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('/profile', 'UserController@profile')->name('user.profile');
+});

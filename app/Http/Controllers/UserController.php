@@ -51,4 +51,21 @@ class UserController extends Controller
             return response()->json($response, $e->getStatusCode());
         }
     }
+
+    public function profile(Request $request)
+    {
+        try {
+            $data = $this->userService->profile($request->user());
+            
+            $response = array(
+                "status" => "success",
+                "data" => $data,
+            );
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            $response = array("status" => "error", "message" => $e->getMessage());
+            return response()->json($response, $e->getStatusCode());
+        }
+    }
 }
