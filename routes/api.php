@@ -25,4 +25,6 @@ Route::group(
 
 Route::group(['prefix' => 'users', 'middleware' => ['auth:sanctum']], function () {
     Route::get('/profile', 'UserController@profile')->name('user.profile');
+    Route::post('/profile/update', 'UserController@updateProfile')->name('user.update.profile');
+    Route::post('/password/update', 'UserController@updatePassword')->name('user.update.password');
 });

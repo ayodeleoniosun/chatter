@@ -31,12 +31,21 @@ class UserRepository
         return $user->fresh();
     }
 
-    public function update($data, $id)
+    public function updateProfile($data, $id)
     {
         $user = $this->user->find($id);
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];
         $user->phone_number = $data['phone_number'];
+        $user->update();
+
+        return $user;
+    }
+
+    public function updatePassword($data, $id)
+    {
+        $user = $this->user->find($id);
+        $user->password = bcrypt($data['new_password']);
         $user->update();
 
         return $user;

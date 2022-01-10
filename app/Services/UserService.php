@@ -45,6 +45,11 @@ class UserService
             abort(403, __('Phone number belongs to another user'));
         }
 
-        return $this->userRepository->update($data, $userId);
+        return $this->userRepository->updateProfile($data, $userId);
+    }
+
+    public function updatePassword(array $data, int $userId): User
+    {
+        return $this->userRepository->updatePassword($data, $userId);
     }
 }
