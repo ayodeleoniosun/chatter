@@ -37,8 +37,14 @@ class UserService
         ];
     }
 
-    public function profile(User $user)
+    public function updateProfile(array $data, int $userId): User
     {
-        return $user;
+        $userExists = $this->userRepository->getDuplicateUserByPhoneNumber($data['phone_number'], $userId);
+
+        if ($userExists) {
+            abort(403, __('Phone number belongs to another user'));
+        }
+
+        return $this->userRepository->update($data, $userId);
     }
 }

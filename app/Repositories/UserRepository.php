@@ -13,6 +13,16 @@ class UserRepository
         $this->user = $user;
     }
 
+    public function getUserByEmailAddress($emailAddress)
+    {
+        return $this->user->where('email_address', $emailAddress)->first();
+    }
+
+    public function getDuplicateUserByPhoneNumber($phoneNumber, $id)
+    {
+        return $this->user->where('phone_number', $phoneNumber)->where('id', '<>', $id)->first();
+    }
+
     public function save($data)
     {
         $user = $this->user->create($data);
@@ -21,13 +31,14 @@ class UserRepository
         return $user->fresh();
     }
 
-    public function getUserByEmailAddress($emailAddress)
+    public function update($data, $id)
     {
-        return $this->user->where('email_address', $emailAddress)->first();
-    }
+        $user = $this->user->find($id);
+        $user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
+        $user->phone_number = $data['phone_number'];
+        $user->update();
 
-    public function getUserByPhoneNumber($phoneNumber)
-    {
-        return $this->user->where('phone_number', $phoneNumber)->first();
+        return $user;
     }
 }

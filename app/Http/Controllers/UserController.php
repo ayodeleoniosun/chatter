@@ -55,10 +55,26 @@ class UserController extends Controller
     public function profile(Request $request)
     {
         try {
-            $data = $this->userService->profile($request->user());
+            $response = array(
+                "status" => "success",
+                "data" => $request->user(),
+            );
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            $response = array("status" => "error", "message" => $e->getMessage());
+            return response()->json($response, $e->getStatusCode());
+        }
+    }
+
+    public function updateProfile(Request $request)
+    {
+        try {
+            $data = $this->userService->updateProfile($request->all(), $request->user()->id);
             
             $response = array(
                 "status" => "success",
+                "message" => "Profile successfully updated",
                 "data" => $data,
             );
 
