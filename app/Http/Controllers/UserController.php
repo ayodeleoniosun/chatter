@@ -68,6 +68,20 @@ class UserController extends Controller
         }
     }
 
+    public function forgotPassword(Request $request)
+    {
+        try {
+            $this->userService->forgotPassword($request->all());
+            
+            return response()->json([
+                "status" => "success",
+                "message" => "Reset password link successfully sent to ".$request->email_address
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
+        }
+    }
+
     public function updatePassword(UpdatePasswordRequest $request)
     {
         try {

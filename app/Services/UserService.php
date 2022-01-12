@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\SendForgotPasswordMail;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
@@ -46,6 +47,17 @@ class UserService
         }
 
         return $this->userRepository->updateProfile($data, $userId);
+    }
+
+    public function forgotPassword(array $data)
+    {
+        $user = $this->userRepository->getUserByEmailAddress($data['email_address']);
+        
+        if (!$user) {
+            abort(404, __('Email address does not exist'));
+        }
+
+        SendForgotPasswordMail::dispatch($user);
     }
 
     public function updatePassword(array $data, int $userId): User
