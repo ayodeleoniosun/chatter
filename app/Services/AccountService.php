@@ -35,7 +35,7 @@ class AccountService
             abort(401, __('Incorrect login credentials'));
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $this->accountRepository->createToken($user);
 
         return [
             'user' => $user,
@@ -64,7 +64,7 @@ class AccountService
             $tokenExpiryMinutes = Carbon::parse($token->expires_at)->diffInMinutes(Carbon::now());
             $configExpiryMinutes = config('auth.passwords.users.expire');
 
-            if ($tokenExpiryMinutes == $configExpiryMinutes) {
+            if ($tokenExpiryMinutes > $configExpiryMinutes) {
                 abort(403, __('Token has expired. Kindly reset password again.'));
             } else {
                 $user = $this->accountRepository->getUserByEmailAddress($token->email);

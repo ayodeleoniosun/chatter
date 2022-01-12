@@ -25,8 +25,12 @@ class AccountRepository
 
     public function save(array $data): User
     {
-        $user = $this->user->create($data);
-        return $user;
+        return $this->user->create($data);
+    }
+
+    public function createToken(User $user): string
+    {
+        return $user->createToken('auth_token')->plainTextToken;
     }
 
     public function updatePassword(array $data, int $id): User
