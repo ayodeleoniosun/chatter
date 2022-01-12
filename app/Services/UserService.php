@@ -2,10 +2,8 @@
 
 namespace App\Services;
 
-use App\Jobs\SendForgotPasswordMail;
 use App\Models\User;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
@@ -14,28 +12,6 @@ class UserService
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-    }
-
-    public function register(array $data): User
-    {
-        $data['password'] = bcrypt($data['password']);
-        return $this->userRepository->save($data);
-    }
-
-    public function login(array $data): array
-    {
-        $user = $this->userRepository->getUserByEmailAddress($data['email_address']);
-        
-        if (!$user || !Hash::check($data['password'], $user->password)) {
-            abort(401, __('Incorrect login credentials'));
-        }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return [
-            'user' => $user,
-            'token' => $token
-        ];
     }
 
     public function updateProfile(array $data, int $userId): User
@@ -47,17 +23,6 @@ class UserService
         }
 
         return $this->userRepository->updateProfile($data, $userId);
-    }
-
-    public function forgotPassword(array $data)
-    {
-        $user = $this->userRepository->getUserByEmailAddress($data['email_address']);
-        
-        if (!$user) {
-            abort(404, __('Email address does not exist'));
-        }
-
-        SendForgotPasswordMail::dispatch($user);
     }
 
     public function updatePassword(array $data, int $userId): User

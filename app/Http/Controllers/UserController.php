@@ -17,34 +17,6 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function register(UserRegistrationRequest $request)
-    {
-        try {
-            $user = $this->userService->register($request->all());
-            return response()->json([
-                "status" => "success",
-                "message" => "Registration successful",
-                "data" => $user
-            ], 201);
-        } catch (Exception $e) {
-            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
-        }
-    }
-
-    public function login(Request $request)
-    {
-        try {
-            $data = $this->userService->login($request->all());
-            return response()->json([
-                "status" => "success",
-                "message" => "Login successful",
-                "data" => $data
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json(["status" => "error", "message" => $e->getMessage()]);
-        }
-    }
-
     public function profile(Request $request)
     {
         try {
@@ -62,20 +34,6 @@ class UserController extends Controller
                 "status" => "success",
                 "message" => "Profile successfully updated",
                 "data" => $data
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
-        }
-    }
-
-    public function forgotPassword(Request $request)
-    {
-        try {
-            $this->userService->forgotPassword($request->all());
-            
-            return response()->json([
-                "status" => "success",
-                "message" => "Reset password link successfully sent to ".$request->email_address
             ], 200);
         } catch (Exception $e) {
             return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
