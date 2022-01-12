@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UserRegistrationRequest;
 use App\Services\AccountService;
 use Exception;
@@ -52,6 +53,20 @@ class AccountController extends Controller
             return response()->json([
                 "status" => "success",
                 "message" => "Reset password link successfully sent to ".$request->email_address
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
+        }
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        try {
+            $this->accountService->resetPassword($request->all());
+            
+            return response()->json([
+                "status" => "success",
+                "message" => "Password successfully reset"
             ], 200);
         } catch (Exception $e) {
             return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());

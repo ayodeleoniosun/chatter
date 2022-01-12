@@ -13,21 +13,24 @@ class AccountRepository
         $this->user = $user;
     }
 
-    public function getUserByEmailAddress($emailAddress)
+    public function getUserByEmailAddress(string $emailAddress): User
     {
         return app(UserRepository::class)->getUserByEmailAddress($emailAddress);
     }
 
-    public function getDuplicateUserByPhoneNumber($phoneNumber, $id)
+    public function getDuplicateUserByPhoneNumber(string $phoneNumber, int $id): User
     {
         return app(UserRepository::class)->getDuplicateUserByPhoneNumber($$phoneNumber, $id);
     }
 
-    public function save($data)
+    public function save(array $data): User
     {
         $user = $this->user->create($data);
-        $user->createToken('auth_token')->plainTextToken;
+        return $user;
+    }
 
-        return $user->fresh();
+    public function updatePassword(array $data, int $id): User
+    {
+        return app(UserRepository::class)->updatePassword($data, $id);
     }
 }

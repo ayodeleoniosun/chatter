@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use phpDocumentor\Reflection\Types\Nullable;
 
 class UserRepository
 {
@@ -13,17 +14,17 @@ class UserRepository
         $this->user = $user;
     }
 
-    public function getUserByEmailAddress($emailAddress)
+    public function getUserByEmailAddress(string $emailAddress): User
     {
         return $this->user->where('email_address', $emailAddress)->first();
     }
 
-    public function getDuplicateUserByPhoneNumber($phoneNumber, $id)
+    public function getDuplicateUserByPhoneNumber(string $phoneNumber, int $id)
     {
         return $this->user->where('phone_number', $phoneNumber)->where('id', '<>', $id)->first();
     }
 
-    public function updateProfile($data, $id)
+    public function updateProfile(array $data, int $id): User
     {
         $user = $this->user->find($id);
         $user->first_name = $data['first_name'];
@@ -34,7 +35,7 @@ class UserRepository
         return $user;
     }
 
-    public function updatePassword($data, $id)
+    public function updatePassword(array $data, int $id): User
     {
         $user = $this->user->find($id);
         $user->password = bcrypt($data['new_password']);

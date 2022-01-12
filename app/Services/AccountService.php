@@ -5,15 +5,20 @@ namespace App\Services;
 use App\Jobs\SendForgotPasswordMail;
 use App\Models\User;
 use App\Repositories\AccountRepository;
+use App\Repositories\PasswordResetRepository;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AccountService
 {
     protected $accountRepository;
+    protected $passwordResetRepository;
 
-    public function __construct(AccountRepository $accountRepository)
+    public function __construct(AccountRepository $accountRepository, PasswordResetRepository $passwordResetRepository)
     {
         $this->accountRepository = $accountRepository;
+        $this->passwordResetRepository = $passwordResetRepository;
     }
 
     public function register(array $data): User
@@ -47,5 +52,28 @@ class AccountService
         }
 
         SendForgotPasswordMail::dispatch($user);
+    }
+
+    public function resetPassword(array $data)
+    {
+        $token = $this->passwordResetRepository->validateToken($data['token']);
+        
+        if (!$token || $token->used) {
+            abort(403, __('Invalid token'));
+        } else {
+            $tokenExpiryMinutes = Carbon::parse($token->expires_at)->diffInMinutes(Carbon::now());
+            $configExpiryMinutes = config('auth.passwords.users.expire');
+
+            if ($tokenExpiryMinutes == $configExpiryMinutes) {
+                abort(403, __('Token has expired. Kindly reset password again.'));
+            } else {
+                $user = $this->accountRepository->getUserByEmailAddress($token->email);
+                
+                DB::transaction(function () use ($data, $user, $token) {
+                    $this->accountRepository->updatePassword($data, $user->id);
+                    $this->passwordResetRepository->invalidateToken($token);
+                });
+            }
+        }
     }
 }
