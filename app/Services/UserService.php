@@ -21,7 +21,7 @@ class UserService
         $userExists = $this->userRepository->getDuplicateUserByPhoneNumber($data['phone_number'], $userId);
 
         if ($userExists) {
-            abort(403, __('Phone number belongs to another user'));
+            abort(403, 'Phone number belongs to another user');
         }
 
         return new UserResource($this->userRepository->updateProfile($data, $userId));

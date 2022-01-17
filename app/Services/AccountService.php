@@ -32,7 +32,7 @@ class AccountService
         $user = $this->accountRepository->getUserByEmailAddress($data['email_address']);
         
         if (!$user || !Hash::check($data['password'], $user->password)) {
-            abort(401, __('Incorrect login credentials'));
+            abort(401, 'Incorrect login credentials');
         }
 
         $token = $this->accountRepository->createToken($user);
@@ -48,7 +48,7 @@ class AccountService
         $user = $this->accountRepository->getUserByEmailAddress($data['email_address']);
         
         if (!$user) {
-            abort(404, __('Email address does not exist'));
+            abort(404, 'Email address does not exist');
         }
 
         SendForgotPasswordMail::dispatch($user);
@@ -59,13 +59,13 @@ class AccountService
         $token = $this->passwordResetRepository->validateToken($data['token']);
         
         if (!$token || $token->used) {
-            abort(403, __('Invalid token'));
+            abort(403, 'Invalid token');
         } else {
             $tokenExpiryMinutes = Carbon::parse($token->expires_at)->diffInMinutes(Carbon::now());
             $configExpiryMinutes = config('auth.passwords.users.expire');
 
             if ($tokenExpiryMinutes > $configExpiryMinutes) {
-                abort(403, __('Token has expired. Kindly reset password again.'));
+                abort(403, 'Token has expired. Kindly reset password again.');
             } else {
                 $user = $this->accountRepository->getUserByEmailAddress($token->email);
                 
