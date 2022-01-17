@@ -49,8 +49,8 @@ class UserRepository
         return $user;
     }
 
-    public function updateProfilePicture(string $filename, int $userId)
+    public function updateProfilePicture(string $filename, int $id)
     {
-        return app(UserProfilePictureRepository::class)->save($filename, $userId);
+        return app(UserProfilePictureRepository::class)->save($filename, $id);
     }
 }

@@ -13,14 +13,14 @@ class AccountRepository
         $this->user = $user;
     }
 
-    public function getUserByEmailAddress(string $emailAddress): User
+    public function getUserByEmailAddress(string $email): User
     {
-        return app(UserRepository::class)->getUserByEmailAddress($emailAddress);
+        return app(UserRepository::class)->getUserByEmailAddress($email);
     }
 
-    public function getDuplicateUserByPhoneNumber(string $phoneNumber, int $id): User
+    public function getDuplicateUserByPhoneNumber(string $phone, int $id): User
     {
-        return app(UserRepository::class)->getDuplicateUserByPhoneNumber($$phoneNumber, $id);
+        return app(UserRepository::class)->getDuplicateUserByPhoneNumber($$phone, $id);
     }
 
     public function save(array $data): User

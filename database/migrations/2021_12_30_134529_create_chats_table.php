@@ -21,8 +21,8 @@ class CreateChatsTable extends Migration
             $table->longText('content');
             $table->string('content_type')->default('text');
             $table->foreignId('file_id')->constrained('files');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

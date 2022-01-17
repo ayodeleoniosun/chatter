@@ -7,27 +7,27 @@ use App\Models\UserProfilePicture;
 
 class UserProfilePictureRepository
 {
-    protected $profilePicture;
+    protected $picture;
 
-    public function __construct(UserProfilePicture $profilePicture)
+    public function __construct(UserProfilePicture $picture)
     {
-        $this->profilePicture = $profilePicture;
+        $this->picture = $picture;
     }
 
-    public function save(string $filename, int $userId) : void
+    public function save(string $filename, int $id) : void
     {
         $file = app(FileRepository::class)->create([
             'filename' => $filename,
             'type' => File::PROFILE_PICTURE,
-            'object_id' => $userId
+            'object_id' => $id
         ]);
 
-        $data = ['user_id' => $userId, 'file_id' => $file->id];
+        $data = ['user_id' => $id, 'file_id' => $file->id];
         
-        $profilePicture = $this->profilePicture->create($data);
+        $picture = $this->picture->create($data);
 
-        $user = app(UserRepository::class)->getUser($userId);
-        $user->profile_picture_id = $profilePicture->id;
+        $user = app(UserRepository::class)->getUser($id);
+        $user->profile_picture_id = $picture->id;
         $user->save();
     }
 }
