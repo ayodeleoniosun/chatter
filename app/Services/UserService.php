@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +16,7 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    public function updateProfile(array $data, int $userId): User
+    public function updateProfile(array $data, int $userId): UserResource
     {
         $userExists = $this->userRepository->getDuplicateUserByPhoneNumber($data['phone_number'], $userId);
 
@@ -23,7 +24,12 @@ class UserService
             abort(403, __('Phone number belongs to another user'));
         }
 
-        return $this->userRepository->updateProfile($data, $userId);
+        return new UserResource($this->userRepository->updateProfile($data, $userId));
+    }
+
+    public function profile(int $userId): UserResource
+    {
+        return new UserResource($this->userRepository->getUser($userId));
     }
 
     public function updateProfilePicture(object $image, int $userId): array

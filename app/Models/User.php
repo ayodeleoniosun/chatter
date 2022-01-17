@@ -13,7 +13,7 @@ class User extends Authenticable
 
     protected $table = 'users';
 
-    protected $hidden = ['id', 'password'];
+    protected $hidden = ['password'];
 
     protected $guarded = ['id'];
 
@@ -25,6 +25,11 @@ class User extends Authenticable
     public function outboxes()
     {
         return $this->hasMany(PrivateMessage::class, 'sender_id');
+    }
+
+    public function profilePicture()
+    {
+        return $this->belongsTo(UserProfilePicture::class);
     }
 
     public function profilePictures()

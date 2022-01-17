@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UpdateProfilePictureRequest;
+use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,7 +21,9 @@ class UserController extends Controller
     public function profile(Request $request)
     {
         try {
-            return response()->json(["status" => "success", "data" => $request->user()], 200);
+            $data = $this->userService->profile($request->user()->id);
+            
+            return response()->json(["status" => "success", "data" => $data], 200);
         } catch (Exception $e) {
             return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
         }
