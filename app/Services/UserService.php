@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Storage;
 
 class UserService
 {
@@ -23,6 +24,14 @@ class UserService
         }
 
         return $this->userRepository->updateProfile($data, $userId);
+    }
+
+    public function updateProfilePicture(object $image, int $userId): array
+    {
+        $filename = time().'.'.$image->extension();
+        Storage::disk('s3')->put($filename, file_get_contents($image->getRealPath()));
+        $this->userRepository->updateProfilePicture($filename, $userId);
+        return ['filename' => $filename];
     }
 
     public function updatePassword(array $data, int $userId): User

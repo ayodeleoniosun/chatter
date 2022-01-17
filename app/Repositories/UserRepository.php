@@ -14,6 +14,11 @@ class UserRepository
         $this->user = $user;
     }
 
+    public function getUser(int $id): User
+    {
+        return $this->user->find($id);
+    }
+
     public function getUserByEmailAddress(string $emailAddress): User
     {
         return $this->user->where('email_address', $emailAddress)->first();
@@ -42,5 +47,10 @@ class UserRepository
         $user->update();
 
         return $user;
+    }
+
+    public function updateProfilePicture(string $filename, int $userId)
+    {
+        return app(UserProfilePictureRepository::class)->save($filename, $userId);
     }
 }

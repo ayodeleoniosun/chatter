@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdatePasswordRequest;
-use App\Http\Requests\UserRegistrationRequest;
+use App\Http\Requests\UpdateProfilePictureRequest;
 use App\Services\UserService;
 use Exception;
 use Illuminate\Http\Request;
@@ -36,6 +36,21 @@ class UserController extends Controller
                 "data" => $data
             ], 200);
         } catch (Exception $e) {
+            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
+        }
+    }
+
+    public function updateProfilePicture(UpdateProfilePictureRequest $request)
+    {
+        try {
+            $data = $this->userService->updateProfilePicture($request->image, $request->user()->id);
+            return response()->json([
+                "status" => "success",
+                "message" => "Profile picture successfully updated",
+                "data" => $data
+            ], 200);
+        } catch (Exception $e) {
+            dd($e);
             return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
         }
     }

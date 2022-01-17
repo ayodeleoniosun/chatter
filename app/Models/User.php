@@ -15,14 +15,7 @@ class User extends Authenticable
 
     protected $hidden = ['id', 'password'];
 
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'email_address',
-        'phone_number',
-        'password',
-        'bearer_token'
-    ];
+    protected $guarded = ['id'];
 
     public function inboxes()
     {
@@ -32,5 +25,10 @@ class User extends Authenticable
     public function outboxes()
     {
         return $this->hasMany(PrivateMessage::class, 'sender_id');
+    }
+
+    public function profilePictures()
+    {
+        return $this->hasMany(UserProfilePicture::class, 'user_id');
     }
 }
