@@ -2,18 +2,18 @@
 
 namespace App\Services;
 
+use App\Models\{User, PasswordReset};
+use App\Repositories\{AccountRepository, PasswordResetRepository};
 use App\Jobs\SendForgotPasswordMail;
-use App\Models\User;
-use App\Repositories\AccountRepository;
-use App\Repositories\PasswordResetRepository;
+use App\Http\Resources\UserResource;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{DB, Hash};
+use Illuminate\Support\Str;
 
 class AccountService
 {
-    protected $accountRepository;
-    protected $passwordResetRepository;
+    protected AccountRepository $accountRepository;
+    protected PasswordResetRepository $passwordResetRepository;
 
     public function __construct(AccountRepository $accountRepository, PasswordResetRepository $passwordResetRepository)
     {
@@ -30,34 +30,39 @@ class AccountService
     public function login(array $data): array
     {
         $user = $this->accountRepository->getUserByEmailAddress($data['email_address']);
-        
+
         if (!$user || !Hash::check($data['password'], $user->password)) {
             abort(401, 'Incorrect login credentials');
         }
 
         $token = $this->accountRepository->createToken($user);
 
-        return [
-            'user' => $user,
-            'token' => $token
-        ];
+        return ['user' => new UserResource($user), 'token' => $token];
     }
 
-    public function forgotPassword(array $data)
+    public function forgotPassword(array $data): ?PasswordReset
     {
         $user = $this->accountRepository->getUserByEmailAddress($data['email_address']);
-        
+
         if (!$user) {
             abort(404, 'Email address does not exist');
         }
 
-        SendForgotPasswordMail::dispatch($user);
+        $token = Str::random(60);
+        $forgotPasswordLink = config('app.url') . '/reset-password?token=' . $token;
+        $expiration = Carbon::now()->addMinutes(10)->toDateTimeString();
+
+        $data = json_encode(['token' => $token, 'link' => $forgotPasswordLink, 'expiration' => $expiration]);
+
+        SendForgotPasswordMail::dispatch($user, $data);
+
+        return app(PasswordResetRepository::class)->create(['email' => $user->email_address, 'token' => $token, 'expires_at' => $expiration]);
     }
 
-    public function resetPassword(array $data)
+    public function resetPassword(array $data): void
     {
         $token = $this->passwordResetRepository->validateToken($data['token']);
-        
+
         if (!$token || $token->used) {
             abort(403, 'Invalid token');
         } else {
@@ -68,7 +73,7 @@ class AccountService
                 abort(403, 'Token has expired. Kindly reset password again.');
             } else {
                 $user = $this->accountRepository->getUserByEmailAddress($token->email);
-                
+
                 DB::transaction(function () use ($data, $user, $token) {
                     $this->accountRepository->updatePassword($data, $user->id);
                     $this->passwordResetRepository->invalidateToken($token);

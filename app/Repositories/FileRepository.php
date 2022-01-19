@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repositories;
 
@@ -6,14 +7,14 @@ use App\Models\File;
 
 class FileRepository
 {
-    protected $file;
+    private File $file;
 
     public function __construct(File $file)
     {
         $this->file = $file;
     }
 
-    public function create(array $data) : File
+    public function create(array $data): File
     {
         return $this->file->create($data);
     }

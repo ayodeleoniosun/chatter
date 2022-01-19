@@ -10,8 +10,6 @@ class File extends Model
 
     protected $guarded = ['id'];
 
-    const PROFILE_PICTURE = 'profile_picture';
-    
     public function chat()
     {
         return $this->hasOne(Chat::class, 'file_id');

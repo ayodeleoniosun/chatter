@@ -17,9 +17,9 @@ class ForgotPasswordMail extends Mailable
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct(object $data)
     {
-        $this->data = json_decode($data);
+        $this->data = $data;
     }
 
     /**
@@ -33,7 +33,7 @@ class ForgotPasswordMail extends Mailable
             ->subject('Hey, You forgot your password')
             ->markdown('emails.passwords.forgot')->with([
                 'first_name' => ucfirst($this->data->first_name),
-                'url' => $this->data->forgot_password_link
+                'url' => $this->data->link
             ]);
     }
 }

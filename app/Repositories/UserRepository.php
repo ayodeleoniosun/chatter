@@ -1,37 +1,43 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Models\User;
-use phpDocumentor\Reflection\Types\Nullable;
+use App\Models\{User, UserProfilePicture};
+use Illuminate\Support\Str;
 
 class UserRepository
 {
-    protected $user;
+    private User $user;
 
     public function __construct(User $user)
     {
         $this->user = $user;
     }
 
-    public function getUser(int $id): User
+    public function getUsers()
+    {
+        return User::all();
+    }
+
+    public function getUser(int $id): ?User
     {
         return $this->user->find($id);
     }
 
-    public function getUserByEmailAddress(string $emailAddress): User
+    public function getUserByEmailAddress(string $emailAddress): ?User
     {
         return $this->user->where('email_address', $emailAddress)->first();
     }
 
-    public function getDuplicateUserByPhoneNumber(string $phoneNumber, int $id)
+    public function getDuplicateUserByPhoneNumber(string $phoneNumber, int $id): ?User
     {
         return $this->user->where('phone_number', $phoneNumber)->where('id', '<>', $id)->first();
     }
 
     public function updateProfile(array $data, int $id): User
     {
-        $user = $this->user->find($id);
+        $user = $this->getUser($id);
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];
         $user->phone_number = $data['phone_number'];
@@ -42,15 +48,26 @@ class UserRepository
 
     public function updatePassword(array $data, int $id): User
     {
-        $user = $this->user->find($id);
+        $user = $this->getUser($id);
         $user->password = bcrypt($data['new_password']);
         $user->update();
 
         return $user;
     }
 
-    public function updateProfilePicture(string $filename, int $id)
+    public function updateProfilePicture(string $filename, int $id): User
     {
         return app(UserProfilePictureRepository::class)->save($filename, $id);
+    }
+
+    public function inviteUser(string $email, int $id)
+    {
+        $data = [
+            'invited_by' => $id,
+            'invitee'    => $email,
+            'token'      => Str::random(60)
+        ];
+
+        return app(InvitationRepository::class)->create($data);
     }
 }

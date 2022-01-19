@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ResetPasswordRequest;
-use App\Http\Requests\UserRegistrationRequest;
+use App\Http\Requests\{ResetPasswordRequest, UserRegistrationRequest};
 use App\Services\AccountService;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,12 +22,15 @@ class AccountController extends Controller
         try {
             $user = $this->accountService->register($request->all());
             return response()->json([
-                "status" => "success",
+                "status"  => "success",
                 "message" => "Registration successful",
-                "data" => $user
+                "data"    => $user
             ], 201);
         } catch (Exception $e) {
-            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
+            return response()->json([
+                "status"  => "error",
+                "message" => $e->getMessage()
+            ], $e->getStatusCode());
         }
     }
 
@@ -36,12 +39,15 @@ class AccountController extends Controller
         try {
             $data = $this->accountService->login($request->all());
             return response()->json([
-                "status" => "success",
+                "status"  => "success",
                 "message" => "Login successful",
-                "data" => $data
+                "data"    => $data
             ], 200);
         } catch (Exception $e) {
-            return response()->json(["status" => "error", "message" => $e->getMessage()]);
+            return response()->json([
+                "status"  => "error",
+                "message" => $e->getMessage()
+            ]);
         }
     }
 
@@ -49,13 +55,16 @@ class AccountController extends Controller
     {
         try {
             $this->accountService->forgotPassword($request->all());
-            
+
             return response()->json([
-                "status" => "success",
-                "message" => "Reset password link successfully sent to ".$request->email_address
+                "status"  => "success",
+                "message" => "Reset password link successfully sent to " . $request->email_address
             ], 200);
         } catch (Exception $e) {
-            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
+            return response()->json([
+                "status"  => "error",
+                "message" => $e->getMessage()
+            ], $e->getStatusCode());
         }
     }
 
@@ -63,13 +72,16 @@ class AccountController extends Controller
     {
         try {
             $this->accountService->resetPassword($request->all());
-            
+
             return response()->json([
-                "status" => "success",
+                "status"  => "success",
                 "message" => "Password successfully reset"
             ], 200);
         } catch (Exception $e) {
-            return response()->json(["status" => "error", "message" => $e->getMessage()], $e->getStatusCode());
+            return response()->json([
+                "status"  => "error",
+                "message" => $e->getMessage()
+            ], $e->getStatusCode());
         }
     }
 }

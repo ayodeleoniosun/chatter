@@ -3,16 +3,13 @@
 namespace App\Jobs;
 
 use App\Mail\ForgotPasswordMail;
-use App\Models\PasswordReset;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class SendForgotPasswordMail implements ShouldQueue
 {
@@ -20,14 +17,17 @@ class SendForgotPasswordMail implements ShouldQueue
 
     protected $user;
 
+    protected $data;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, string $data)
     {
         $this->user = $user;
+        $this->data = json_decode($data);
     }
 
     /**
@@ -37,21 +37,7 @@ class SendForgotPasswordMail implements ShouldQueue
      */
     public function handle()
     {
-        $token = Str::random(60);
-        $forgotPasswordLink = config('app.url').'/reset-password?token='.$token;
-        $nextTenMinutes = Carbon::now()->addMinutes(10)->toDateTimeString();
-        
-        $data = json_encode([
-            'first_name' => $this->user->first_name,
-            'forgot_password_link' => $forgotPasswordLink
-        ]);
-
-        Mail::to($this->user->email_address)->queue(new ForgotPasswordMail($data));
-    
-        PasswordReset::create([
-            'email' => $this->user->email_address,
-            'token' => $token,
-            'expires_at' => $nextTenMinutes
-        ]);
+        $this->data->first_name = ucfirst($this->user->first_name);
+        Mail::to($this->user->email_address)->queue(new ForgotPasswordMail($this->data));
     }
 }
