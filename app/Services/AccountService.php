@@ -37,7 +37,10 @@ class AccountService
 
         $token = $this->accountRepository->createToken($user);
 
-        return ['user' => new UserResource($user), 'token' => $token];
+        return [
+            'user'  => new UserResource($user),
+            'token' => $token
+        ];
     }
 
     public function forgotPassword(array $data): ?PasswordReset
@@ -52,11 +55,20 @@ class AccountService
         $forgotPasswordLink = config('app.url') . '/reset-password?token=' . $token;
         $expiration = Carbon::now()->addMinutes(10)->toDateTimeString();
 
-        $data = json_encode(['token' => $token, 'link' => $forgotPasswordLink, 'expiration' => $expiration]);
+        $data = json_encode([
+            'user'       => $user,
+            'token'      => $token,
+            'link'       => $forgotPasswordLink,
+            'expiration' => $expiration
+        ]);
 
-        SendForgotPasswordMail::dispatch($user, $data);
+        SendForgotPasswordMail::dispatch($data);
 
-        return app(PasswordResetRepository::class)->create(['email' => $user->email_address, 'token' => $token, 'expires_at' => $expiration]);
+        return app(PasswordResetRepository::class)->create([
+            'email'      => $user->email_address,
+            'token'      => $token,
+            'expires_at' => $expiration
+        ]);
     }
 
     public function resetPassword(array $data): void

@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\{InviteUserRequest, UpdatePasswordRequest, UpdateProfilePictureRequest};
+use App\Http\Requests\InviteUserRequest;
+use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\UpdateProfilePictureRequest;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Exception;
@@ -105,7 +107,7 @@ class UserController extends Controller
     public function invite(InviteUserRequest $request)
     {
         try {
-            $this->userService->inviteUser($request->email_address, $request->user());
+            $this->userService->inviteUser($request->invitee, $request->user());
 
             return response()->json([
                 "status"  => "success",

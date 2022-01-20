@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ForgotPasswordMail extends Mailable
+class InvitationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -29,9 +29,9 @@ class ForgotPasswordMail extends Mailable
      */
     public function build()
     {
-        return $this->from(config('mail.from.address', 'Reset Password'))->subject('Hey, You forgot your password')->markdown('emails.forgot-password')->with([
-            'first_name' => ucfirst($this->data->user->first_name),
-            'url'        => $this->data->link
+        return $this->from(config('mail.from.address', 'Invitation to chatter'))->subject('Hey, you are invited')->markdown('emails.invitation')->with([
+            'invited_by' => ucfirst($this->data->user->first_name),
+            'url'        => $this->data->invitation_link
         ]);
     }
 }

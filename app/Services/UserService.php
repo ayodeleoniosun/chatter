@@ -5,9 +5,11 @@ namespace App\Services;
 
 use App\Http\Resources\UserResource;
 use App\Jobs\SendInvitationMail;
-use App\Models\User;
-use App\Repositories\UserRepository;
+use App\Models\{User, Invitation};
+use App\Repositories\{UserRepository, InvitationRepository};
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class UserService
 {
@@ -58,8 +60,27 @@ class UserService
         return $this->userRepository->updatePassword($data, $id);
     }
 
-    public function inviteUser(string $email, User $user)
+    public function inviteUser(string $invitee, User $user): Invitation
     {
-        SendInvitationMail::dispatch($email, $user);
+        $token = Str::random(60);
+        $invitationLink = config('app.url') . '/invitations?token=' . $token;
+        $expiration = Carbon::now()->addDays(2)->toDateTimeString();
+
+        $data = json_encode([
+            'invitee'         => $invitee,
+            'user'            => $user,
+            'token'           => $token,
+            'invitation_link' => $invitationLink,
+            'expiration'      => $expiration
+        ]);
+
+        SendInvitationMail::dispatch($data);
+
+        return app(InvitationRepository::class)->create([
+            'invited_by' => $user->id,
+            'invitee'    => $invitee,
+            'token'      => $token,
+            'expires_at' => $expiration
+        ]);
     }
 }

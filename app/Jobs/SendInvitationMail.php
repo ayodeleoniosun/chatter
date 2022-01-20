@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\ForgotPasswordMail;
+use App\Mail\InvitationMail;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendForgotPasswordMail implements ShouldQueue
+class SendInvitationMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -34,7 +35,6 @@ class SendForgotPasswordMail implements ShouldQueue
      */
     public function handle()
     {
-        $this->data->user->first_name = ucfirst($this->data->user->first_name);
-        Mail::to($this->data->user->email_address)->queue(new ForgotPasswordMail($this->data));
+        Mail::to($this->data->invitee)->queue(new InvitationMail($this->data));
     }
 }
