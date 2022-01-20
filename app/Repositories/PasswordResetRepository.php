@@ -19,9 +19,12 @@ class PasswordResetRepository
         return $this->token->create($data);
     }
 
-    public function validateToken(string $token): ?PasswordReset
+    public function getToken(string $token): ?PasswordReset
     {
-        return $this->token->find($token);
+        return $this->token->where([
+            'token' => $token,
+            'used'  => false
+        ])->first();
     }
 
     public function invalidateToken(PasswordReset $token): void

@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\{ResetPasswordRequest, UserRegistrationRequest};
+use App\Http\Requests\AcceptInvitationRequest;
+use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\UserRegistrationRequest;
 use App\Services\AccountService;
 use Exception;
 use Illuminate\Http\Request;
@@ -76,6 +78,23 @@ class AccountController extends Controller
             return response()->json([
                 "status"  => "success",
                 "message" => "Password successfully reset"
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                "status"  => "error",
+                "message" => $e->getMessage()
+            ], $e->getStatusCode());
+        }
+    }
+
+    public function acceptInvitation(AcceptInvitationRequest $request)
+    {
+        try {
+            $this->accountService->acceptInvitation($request->all());
+
+            return response()->json([
+                "status"  => "success",
+                "message" => "Invitation accepted successfully"
             ], 200);
         } catch (Exception $e) {
             return response()->json([

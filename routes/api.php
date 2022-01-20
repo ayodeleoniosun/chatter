@@ -13,17 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(
-    ['prefix' => 'accounts'],
-    function () {
-        Route::post('/register', 'AccountController@register')->name('account.register');
-        Route::post('/login', 'AccountController@login')->name('account.login');
-        Route::post('/password/forgot', 'AccountController@forgotPassword')->name('account.password.forgot');
-        Route::post('/password/reset', 'AccountController@resetPassword')->name('account.password.reset');
-    }
-);
+Route::group(['prefix' => 'accounts'], function () {
+    Route::post('/register', 'AccountController@register')->name('account.register');
+    Route::post('/login', 'AccountController@login')->name('account.login');
+    Route::post('/password/forgot', 'AccountController@forgotPassword')->name('account.password.forgot');
+    Route::post('/password/reset', 'AccountController@resetPassword')->name('account.password.reset');
+    Route::post('/invitation/accept', 'AccountController@acceptInvitation')->name('account.invitation.accept');
+});
 
-Route::group(['prefix' => 'users', 'middleware' => ['auth:sanctum']], function () {
+Route::group([
+    'prefix'     => 'users',
+    'middleware' => ['auth:sanctum']
+], function () {
     Route::get('/profile', 'UserController@profile')->name('user.profile');
     Route::post('/profile/update', 'UserController@updateProfile')->name('user.update.profile');
     Route::post('/password/update', 'UserController@updatePassword')->name('user.update.password');

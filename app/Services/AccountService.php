@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\{User, PasswordReset};
-use App\Repositories\{AccountRepository, PasswordResetRepository};
+use App\Repositories\{AccountRepository, PasswordResetRepository, InvitationRepository};
 use App\Jobs\SendForgotPasswordMail;
 use App\Http\Resources\UserResource;
 use Carbon\Carbon;
@@ -14,11 +14,13 @@ class AccountService
 {
     protected AccountRepository $accountRepository;
     protected PasswordResetRepository $passwordResetRepository;
+    protected InvitationRepository $invitationRepository;
 
-    public function __construct(AccountRepository $accountRepository, PasswordResetRepository $passwordResetRepository)
+    public function __construct(AccountRepository $accountRepository, PasswordResetRepository $passwordResetRepository, InvitationRepository $invitationRepository)
     {
         $this->accountRepository = $accountRepository;
         $this->passwordResetRepository = $passwordResetRepository;
+        $this->invitationRepository = $invitationRepository;
     }
 
     public function register(array $data): User
@@ -73,9 +75,9 @@ class AccountService
 
     public function resetPassword(array $data): void
     {
-        $token = $this->passwordResetRepository->validateToken($data['token']);
+        $token = $this->passwordResetRepository->getToken($data['token']);
 
-        if (!$token || $token->used) {
+        if (!$token) {
             abort(403, 'Invalid token');
         } else {
             $tokenExpiryMinutes = Carbon::parse($token->expires_at)->diffInMinutes(Carbon::now());
@@ -91,6 +93,20 @@ class AccountService
                     $this->passwordResetRepository->invalidateToken($token);
                 });
             }
+        }
+    }
+
+    public function acceptInvitation(array $data): void
+    {
+        $token = $this->invitationRepository->getToken($data['token']);
+
+        if (!$token || $token->invitee != $data['email_address']) {
+            abort(403, 'Invalid token');
+        } else {
+            DB::transaction(function () use ($data, $token,) {
+                $this->invitationRepository->invalidateToken($token);
+                $this->register($data);
+            });
         }
     }
 }

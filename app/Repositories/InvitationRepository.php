@@ -18,4 +18,19 @@ class InvitationRepository
     {
         return $this->invitation->create($data);
     }
+
+    public function getToken(string $token): ?Invitation
+    {
+        return $this->invitation->where([
+            'token' => $token,
+            'used'  => false
+        ])->first();
+    }
+
+    public function invalidateToken(Invitation $invitation): void
+    {
+        $invitation->used = true;
+        $invitation->save();
+    }
+
 }
