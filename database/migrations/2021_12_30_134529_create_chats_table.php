@@ -20,7 +20,7 @@ class CreateChatsTable extends Migration
             $table->foreignId('recipient_id')->constrained('users');
             $table->longText('content');
             $table->string('content_type')->default('text');
-            $table->foreignId('file_id')->constrained('files');
+            $table->foreignId('file_id')->constrained('files')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
