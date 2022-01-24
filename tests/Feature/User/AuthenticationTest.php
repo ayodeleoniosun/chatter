@@ -9,7 +9,8 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_can_login_with_valid_credentials()
+    /** @test */
+    public function can_login_with_valid_credentials()
     {
         $data = [
             'first_name'    => 'firstname',
@@ -36,7 +37,8 @@ class AuthenticationTest extends TestCase
         $this->assertEquals($response->getData()->message, 'Login successful');
     }
 
-    public function test_cannot_login_with_invalid_credentials()
+    /** @test */
+    public function cannot_login_with_invalid_credentials()
     {
         $data = [
             'email_address' => 'email@chatter.app',

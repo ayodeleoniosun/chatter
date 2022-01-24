@@ -10,7 +10,8 @@ class RegistrationTest extends TestCase
 {
     use RefreshDatabase, CreateUsers;
 
-    public function test_cannot_register_with_short_password()
+    /** @test */
+    public function cannot_register_with_short_password()
     {
         $data = [
             'first_name'    => 'firstname',
@@ -26,7 +27,8 @@ class RegistrationTest extends TestCase
         $this->assertEquals($response->getData()->errors->password[0], 'The password must be at least 6 characters.');
     }
 
-    public function test_lastname_and_email_address_required()
+    /** @test */
+    public function lastname_and_email_address_required()
     {
         $data = [
             'first_name'   => 'firstname',
@@ -41,25 +43,19 @@ class RegistrationTest extends TestCase
         $this->assertEquals($response->getData()->errors->email_address[0], 'The email address field is required.');
     }
 
-    public function test_email_address_or_phone_number_exist()
+    /** @test */
+    public function email_address_or_phone_number_exist()
     {
-        $data = [
-            'first_name'    => 'firstname',
-            'last_name'     => 'lastname',
-            'email_address' => 'email@chatter.app',
-            'phone_number'  => '08123456789',
-            'password'      => bcrypt('123456789')
-        ];
-
-        $this->postJson($this->baseUrl . '/accounts/register', $data);
-        $response = $this->postJson($this->baseUrl . '/accounts/register', $data);
+        $user = $this->createUser();
+        $response = $this->postJson($this->baseUrl . '/accounts/register', $user->getAttributes());
         $response->assertStatus(422);
         $this->assertEquals($response->getData()->message, 'The given data was invalid.');
         $this->assertEquals($response->getData()->errors->phone_number[0], 'The phone number has already been taken.');
         $this->assertEquals($response->getData()->errors->email_address[0], 'The email address has already been taken.');
     }
 
-    public function test_can_register_new_user()
+    /** @test */
+    public function can_register_new_user()
     {
         $data = [
             'first_name'    => 'firstname',

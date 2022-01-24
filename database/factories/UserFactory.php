@@ -19,11 +19,11 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'first_name' => $this->faker->name,
-            'last_name' => $this->faker->name,
-            'email_address' => $this->faker->email,
-            'phone_number' => $this->faker->phoneNumber,
-            'password' => bcrypt(Str::random(10))
+            'first_name'    => 'chatter',
+            'last_name'     => 'app',
+            'email_address' => 'chatter@email.com',
+            'phone_number'  => '08123456789',
+            'password'      => bcrypt('12345678')
         ];
     }
 }

@@ -19,8 +19,8 @@ class InvitationFactory extends Factory
     {
         return [
             'invited_by' => 1,
-            'invitee' => $this->faker->email,
-            'token' => bcrypt(Str::random(10))
+            'invitee'    => 'chatter@email.com',
+            'token'      => bcrypt(Str::random(10))
         ];
     }
 }
