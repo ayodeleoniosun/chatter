@@ -21,8 +21,8 @@ class UserFactory extends Factory
         return [
             'first_name'    => 'chatter',
             'last_name'     => 'app',
-            'email_address' => 'chatter@email.com',
-            'phone_number'  => '08123456789',
+            'email_address' => $this->faker->email,
+            'phone_number'  => Str::random(11),
             'password'      => bcrypt('12345678')
         ];
     }

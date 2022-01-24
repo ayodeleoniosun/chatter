@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InviteUserRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UpdateProfilePictureRequest;
+use App\Http\Requests\UpdateUserProfileRequest;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Exception;
@@ -53,7 +54,7 @@ class UserController extends Controller
         }
     }
 
-    public function updateProfile(Request $request)
+    public function updateProfile(UpdateUserProfileRequest $request)
     {
         try {
             $data = $this->userService->updateProfile($request->all(), $request->user()->id);
