@@ -26,8 +26,8 @@ Route::group([
     'middleware' => ['auth:sanctum']
 ], function () {
     Route::get('/profile', 'UserController@profile')->name('user.profile');
-    Route::post('/profile/update', 'UserController@updateProfile')->name('user.update.profile');
-    Route::post('/password/update', 'UserController@updatePassword')->name('user.update.password');
+    Route::put('/profile/update', 'UserController@updateProfile')->name('user.update.profile');
+    Route::put('/password/update', 'UserController@updatePassword')->name('user.update.password');
     Route::post('/picture/update', 'UserController@updateProfilePicture')->name('user.update.picture');
     Route::post('/invite', 'UserController@invite')->name('user.invite');
 });
