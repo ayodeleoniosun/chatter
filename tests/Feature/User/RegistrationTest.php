@@ -28,7 +28,7 @@ class RegistrationTest extends TestCase
     }
 
     /** @test */
-    public function lastname_and_email_address_required()
+    public function cannot_register_if_lastname_and_email_address_is_empty()
     {
         $data = [
             'first_name'   => 'firstname',
@@ -44,7 +44,7 @@ class RegistrationTest extends TestCase
     }
 
     /** @test */
-    public function email_address_or_phone_number_exist()
+    public function cannot_register_if_email_address_or_phone_number_exist()
     {
         $user = $this->createUser();
         $response = $this->postJson($this->baseUrl . '/accounts/register', $user->getAttributes());

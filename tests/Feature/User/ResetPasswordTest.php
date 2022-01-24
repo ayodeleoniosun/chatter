@@ -40,11 +40,7 @@ class ResetPasswordTest extends TestCase
     /** @test */
     public function cannot_reset_password_with_empty_token()
     {
-        $data = [
-            'token'                     => '',
-            'new_password'              => '1234567',
-            'new_password_confirmation' => '1234567',
-        ];
+        $data = ['token' => ''];
 
         $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
         $response->assertStatus(422);
@@ -83,9 +79,7 @@ class ResetPasswordTest extends TestCase
     /** @test */
     public function cannot_reset_password_with_non_existent_token()
     {
-        $data = [
-            'token' => Str::random(60),
-        ];
+        $data = ['token' => Str::random(60)];
 
         $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
         $response->assertStatus(422);

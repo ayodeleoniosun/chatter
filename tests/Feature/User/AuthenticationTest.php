@@ -4,23 +4,18 @@ namespace Tests\Feature\User;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\Traits\CreateUsers;
 
 class AuthenticationTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CreateUsers;
 
     /** @test */
     public function can_login_with_valid_credentials()
     {
-        $data = [
-            'first_name'    => 'firstname',
-            'last_name'     => 'lastname',
-            'email_address' => 'email@chatter.app',
-            'phone_number'  => '08123456789',
-            'password'      => '123456789'
-        ];
+        $user = $this->createUser();
+        $data = ['email_address' => $user->email_address, 'password' => '12345678'];
 
-        $this->postJson($this->baseUrl . '/accounts/register', $data);
         $response = $this->postJson($this->baseUrl . '/accounts/login', $data);
         $response->assertStatus(200);
         $response->assertJsonStructure([
