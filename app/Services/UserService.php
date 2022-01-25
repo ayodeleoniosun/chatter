@@ -83,4 +83,9 @@ class UserService
             'expires_at' => $expiration
         ]);
     }
+
+    public function logout(User $user)
+    {
+        return $user->tokens()->delete();
+    }
 }

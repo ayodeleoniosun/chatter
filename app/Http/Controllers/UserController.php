@@ -121,4 +121,22 @@ class UserController extends Controller
             ], $e->getStatusCode());
         }
     }
+
+    public function logout(Request $request)
+    {
+        try {
+            $this->userService->logout($request->user());
+
+            return response()->json([
+                "status"  => "success",
+                "message" => "Logged out successfully"
+            ], 200);
+        } catch (Exception $e) {
+            dd($e);
+            return response()->json([
+                "status"  => "error",
+                "message" => $e->getMessage()
+            ], $e->getStatusCode());
+        }
+    }
 }

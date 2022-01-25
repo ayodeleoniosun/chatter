@@ -30,6 +30,7 @@ Route::group([
     Route::put('/password/update', 'UserController@updatePassword')->name('user.update.password');
     Route::post('/picture/update', 'UserController@updateProfilePicture')->name('user.update.picture');
     Route::post('/invite', 'UserController@invite')->name('user.invite');
+    Route::get('/logout', 'UserController@logout')->name('user.logout');
 });
 
 Route::get('/users', 'UserController@index')->name('users.index');
