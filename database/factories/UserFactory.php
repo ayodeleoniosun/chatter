@@ -14,14 +14,12 @@ class UserFactory extends Factory
      * @return array
      */
 
-    protected $model = User::class;
-
     public function definition()
     {
         return [
-            'first_name'    => 'chatter',
-            'last_name'     => 'app',
-            'email_address' => $this->faker->email,
+            'first_name'    => $this->faker->name(),
+            'last_name'     => $this->faker->name(),
+            'email_address' => $this->faker->unique()->safeEmail,
             'phone_number'  => Str::random(11),
             'password'      => bcrypt('12345678')
         ];

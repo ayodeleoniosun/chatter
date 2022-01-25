@@ -13,14 +13,12 @@ class ChatFactory extends Factory
      *
      * @return array
      */
-    protected $model = Chat::class;
-
     public function definition()
     {
         return [
-            'sender_id' => 1,
+            'sender_id'    => 1,
             'recipient_id' => 2,
-            'content' => $this->faker->word,
+            'content'      => $this->faker->word,
             'content_type' => ChatType::TEXT
         ];
     }

@@ -13,13 +13,11 @@ class FileFactory extends Factory
      *
      * @return array
      */
-    protected $model = File::class;
-
     public function definition()
     {
         return [
-            'filename' => $this->faker->file,
-            'type' => FileType::PROFILE_PICTURE,
+            'filename'  => $this->faker->file,
+            'type'      => FileType::PROFILE_PICTURE,
             'object_id' => 1
         ];
     }

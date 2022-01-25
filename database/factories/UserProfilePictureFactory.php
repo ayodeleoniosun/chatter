@@ -12,7 +12,6 @@ class UserProfilePictureFactory extends Factory
      *
      * @return array
      */
-    protected $model = UserProfilePicture::class;
 
     public function definition()
     {

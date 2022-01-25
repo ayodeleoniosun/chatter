@@ -13,12 +13,10 @@ class PasswordResetFactory extends Factory
      *
      * @return array
      */
-    protected $model = PasswordReset::class;
-
     public function definition()
     {
         return [
-            'email'      => 'chatter@email.com',
+            'email'      => $this->faker->email,
             'token'      => bcrypt(Str::random(10)),
             'expires_at' => $this->faker->dateTime()
         ];

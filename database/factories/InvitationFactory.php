@@ -13,13 +13,11 @@ class InvitationFactory extends Factory
      *
      * @return array
      */
-    protected $model = Invitation::class;
-
     public function definition()
     {
         return [
             'invited_by' => 1,
-            'invitee'    => 'chatter@email.com',
+            'invitee'    => $this->faker->email,
             'token'      => bcrypt(Str::random(10))
         ];
     }
