@@ -22,7 +22,7 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson($this->baseUrl . '/accounts/register', $data);
-        $response->assertStatus(422);
+        $response->assertUnprocessable();
         $this->assertEquals($response->getData()->message, 'The given data was invalid.');
         $this->assertEquals($response->getData()->errors->password[0], 'The password must be at least 6 characters.');
     }
@@ -37,7 +37,7 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson($this->baseUrl . '/accounts/register', $data);
-        $response->assertStatus(422);
+        $response->assertUnprocessable();
         $this->assertEquals($response->getData()->message, 'The given data was invalid.');
         $this->assertEquals($response->getData()->errors->last_name[0], 'The last name field is required.');
         $this->assertEquals($response->getData()->errors->email_address[0], 'The email address field is required.');
@@ -48,7 +48,7 @@ class RegistrationTest extends TestCase
     {
         $user = $this->createUser();
         $response = $this->postJson($this->baseUrl . '/accounts/register', $user->getAttributes());
-        $response->assertStatus(422);
+        $response->assertUnprocessable();
         $this->assertEquals($response->getData()->message, 'The given data was invalid.');
         $this->assertEquals($response->getData()->errors->phone_number[0], 'The phone number has already been taken.');
         $this->assertEquals($response->getData()->errors->email_address[0], 'The email address has already been taken.');
@@ -66,7 +66,7 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson($this->baseUrl . '/accounts/register', $data);
-        $response->assertStatus(201);
+        $response->assertCreated();
         $this->assertEquals($response->getData()->status, 'success');
         $this->assertEquals($response->getData()->message, 'Registration successful');
         $this->assertEquals($response->getData()->data->first_name, $data['first_name']);

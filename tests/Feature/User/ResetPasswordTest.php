@@ -18,7 +18,7 @@ class ResetPasswordTest extends TestCase
     public function cannot_send_forgot_password_link_to_non_existent_email()
     {
         $response = $this->postJson($this->baseUrl . '/accounts/password/forgot', ['email_address' => 'invalid@email.com']);
-        $response->assertStatus(404);
+        $response->assertNotFound();
         $this->assertEquals($response->getData()->status, 'error');
         $this->assertEquals($response->getData()->message, 'Email address does not exist');
     }
@@ -30,7 +30,7 @@ class ResetPasswordTest extends TestCase
 
         $user = $this->createUser();
         $response = $this->postJson($this->baseUrl . '/accounts/password/forgot', ['email_address' => $user->email_address]);
-        $response->assertStatus(200);
+        $response->assertOk();
         $this->assertEquals($response->getData()->status, 'success');
         $this->assertEquals($response->getData()->message, 'Reset password link successfully sent to ' . $user->email_address);
 
@@ -43,7 +43,7 @@ class ResetPasswordTest extends TestCase
         $data = ['token' => ''];
 
         $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
-        $response->assertStatus(422);
+        $response->assertUnprocessable();
         $this->assertEquals($response->getData()->message, 'The given data was invalid.');
         $this->assertEquals($response->getData()->errors->token[0], 'The token field is required.');
     }
@@ -57,7 +57,7 @@ class ResetPasswordTest extends TestCase
         ];
 
         $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
-        $response->assertStatus(422);
+        $response->assertUnprocessable();
         $this->assertEquals($response->getData()->message, 'The given data was invalid.');
         $this->assertEquals($response->getData()->errors->new_password[0], 'The new password must be at least 6 characters.');
     }
@@ -71,7 +71,7 @@ class ResetPasswordTest extends TestCase
         ];
 
         $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
-        $response->assertStatus(422);
+        $response->assertUnprocessable();
         $this->assertEquals($response->getData()->message, 'The given data was invalid.');
         $this->assertEquals($response->getData()->errors->new_password[0], 'The new password confirmation does not match.');
     }
@@ -82,7 +82,7 @@ class ResetPasswordTest extends TestCase
         $data = ['token' => Str::random(60)];
 
         $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
-        $response->assertStatus(422);
+        $response->assertUnprocessable();
         $this->assertEquals($response->getData()->message, 'The given data was invalid.');
         $this->assertEquals($response->getData()->errors->token[0], 'The selected token is invalid.');
     }
@@ -102,7 +102,7 @@ class ResetPasswordTest extends TestCase
         ];
 
         $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
-        $response->assertStatus(403);
+        $response->assertForbidden();
         $this->assertEquals($response->getData()->status, 'error');
         $this->assertEquals($response->getData()->message, 'Invalid token');
     }
@@ -119,7 +119,7 @@ class ResetPasswordTest extends TestCase
         ];
 
         $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
-        $response->assertStatus(403);
+        $response->assertForbidden();
         $this->assertEquals($response->getData()->status, 'error');
         $this->assertEquals($response->getData()->message, 'Token has expired. Kindly reset password again.');
     }
@@ -141,7 +141,7 @@ class ResetPasswordTest extends TestCase
         ];
 
         $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
-        $response->assertStatus(200);
+        $response->assertOk();
         $this->assertEquals($response->getData()->status, 'success');
         $this->assertEquals($response->getData()->message, 'Password successfully reset');
     }

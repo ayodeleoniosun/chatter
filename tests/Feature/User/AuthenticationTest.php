@@ -17,7 +17,7 @@ class AuthenticationTest extends TestCase
         $data = ['email_address' => $user->email_address, 'password' => '12345678'];
 
         $response = $this->postJson($this->baseUrl . '/accounts/login', $data);
-        $response->assertStatus(200);
+        $response->assertOk();
         $response->assertJsonStructure([
             'status',
             'message',
@@ -41,7 +41,7 @@ class AuthenticationTest extends TestCase
         ];
 
         $response = $this->postJson($this->baseUrl . '/accounts/login', $data);
-        $response->assertStatus(401);
+        $response->assertUnauthorized();
         $this->assertEquals($response->getData()->status, 'error');
         $this->assertEquals($response->getData()->message, 'Incorrect login credentials');
     }
