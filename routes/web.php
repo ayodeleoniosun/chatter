@@ -11,3 +11,4 @@
 |
 */
 
+Route::view('/', 'welcome');
