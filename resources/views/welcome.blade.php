@@ -8,6 +8,7 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Styles -->
     <style>
@@ -21,7 +22,7 @@
         }
 
         .full-height {
-            height: 100vh;
+            height: 90vh;
         }
 
         .flex-center {
@@ -65,35 +66,32 @@
 </head>
 <body>
 <div class="flex-center position-ref full-height">
-    {{--    @if (Route::has('login'))--}}
-    {{--        <div class="top-right links">--}}
-    {{--            @auth--}}
-    {{--                <a href="{{ url('/home') }}">Home</a>--}}
-    {{--            @else--}}
-    {{--                <a href="{{ route('login') }}">Login</a>--}}
+    @if (Route::has('login'))
+        <div class="top-right links">
+            @auth
+                <a href="{{ url('/home') }}">Home</a>
+            @else
+                <a href="{{ route('login') }}">Login</a>
 
-    {{--                @if (Route::has('register'))--}}
-    {{--                    <a href="{{ route('register') }}">Register</a>--}}
-    {{--                @endif--}}
-    {{--            @endauth--}}
-    {{--        </div>--}}
-    {{--    @endif--}}
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}">Register</a>
+                @endif
+            @endauth
+        </div>
+    @endif
 
     <div class="content">
+        <div align="center"><img src="{{ asset('images/chat.png') }}" width="100"/></div>
+        <br/>
         <div class="title m-b-md">
-            Welcome to Chatter API
+            Welcome to Chatter
         </div>
 
-        {{--        <div class="links">--}}
-        {{--            <a href="https://laravel.com/docs">Docs</a>--}}
-        {{--            <a href="https://laracasts.com">Laracasts</a>--}}
-        {{--            <a href="https://laravel-news.com">News</a>--}}
-        {{--            <a href="https://blog.laravel.com">Blog</a>--}}
-        {{--            <a href="https://nova.laravel.com">Nova</a>--}}
-        {{--            <a href="https://forge.laravel.com">Forge</a>--}}
-        {{--            <a href="https://vapor.laravel.com">Vapor</a>--}}
-        {{--            <a href="https://github.com/laravel/laravel">GitHub</a>--}}
-        {{--        </div>--}}
+        <div class="links">
+            <a href="https://laravel.com/docs">Login</a>
+            <a href="https://laracasts.com">Register</a>
+            <a href="https://blog.laravel.com">Forgot Password</a>
+        </div>
     </div>
 </div>
 </body>
