@@ -34,3 +34,10 @@ Route::group([
 });
 
 Route::get('/users', 'UserController@index')->name('users.index');
+
+Route::group([
+    'prefix'     => 'chats',
+    'middleware' => ['auth:sanctum']
+], function () {
+    Route::post('/send', 'ChatController@send')->name('chats.send');
+});

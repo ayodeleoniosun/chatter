@@ -20,9 +20,11 @@ class CreateChatsTable extends Migration
             $table->foreignId('recipient_id')->constrained('users');
             $table->longText('content');
             $table->string('content_type')->default('text');
-            $table->foreignId('file_id')->constrained('files')->nullable();
+            $table->bigInteger('file_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('file_id')->references('id')->on('files');
         });
     }
 
@@ -33,6 +35,6 @@ class CreateChatsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('private_messages');
+        Schema::dropIfExists('chats');
     }
 }
