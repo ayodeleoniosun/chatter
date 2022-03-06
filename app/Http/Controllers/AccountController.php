@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AcceptInvitationRequest;
-use App\Http\Requests\ResetPasswordRequest;
-use App\Http\Requests\UserRegistrationRequest;
+use App\Http\Requests\Users\AcceptInvitationRequest;
+use App\Http\Requests\Users\ResetPasswordRequest;
+use App\Http\Requests\Users\UserRegistrationRequest;
 use App\Services\AccountService;
 use Exception;
 use Illuminate\Http\Request;

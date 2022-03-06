@@ -5,8 +5,10 @@ namespace App\Services;
 
 use App\Http\Resources\UserResource;
 use App\Jobs\SendInvitationMail;
-use App\Models\{User, Invitation};
-use App\Repositories\{UserRepository, InvitationRepository};
+use App\Models\User;
+use App\Models\Invitation;
+use App\Repositories\UserRepository;
+use App\Repositories\InvitationRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -23,7 +25,7 @@ class UserService
     public function index()
     {
         $users = $this->userRepository->getUsers();
-        return $users->map(fn(User $user) => new UserResource($user));
+        return $users->map(fn (User $user) => new UserResource($user));
     }
 
     public function updateProfile(array $data, int $id): UserResource
@@ -49,7 +51,7 @@ class UserService
 
     public function updateProfilePicture(object $image, int $id): UserResource
     {
-        $filename = time() . '.' . $image->extension();
+        $filename = time() . ' . ' . $image->extension();
         Storage::disk('s3')->put($filename, file_get_contents($image->getRealPath()));
         $user = $this->userRepository->updateProfilePicture($filename, $id);
         return new UserResource($user);
@@ -63,7 +65,7 @@ class UserService
     public function inviteUser(string $invitee, User $user): Invitation
     {
         $token = Str::random(60);
-        $invitationLink = config('app.url') . '/invitations?token=' . $token;
+        $invitationLink = config('app . url') . ' / invitations ? token = ' . $token;
         $expiration = Carbon::now()->addDays(2)->toDateTimeString();
 
         $data = json_encode([

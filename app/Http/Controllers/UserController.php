@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\InviteUserRequest;
-use App\Http\Requests\UpdatePasswordRequest;
-use App\Http\Requests\UpdateProfilePictureRequest;
-use App\Http\Requests\UpdateUserProfileRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Requests\Users\InviteUserRequest;
+use App\Http\Requests\Users\UpdatePasswordRequest;
+use App\Http\Requests\Users\UpdateProfilePictureRequest;
+use App\Http\Requests\Users\UpdateUserProfileRequest;
 use App\Services\UserService;
 use Exception;
 use Illuminate\Http\Request;
@@ -30,6 +29,7 @@ class UserController extends Controller
                 "data"   => $data
             ], 200);
         } catch (Exception $e) {
+            dd($e);
             return response()->json([
                 "status"  => "error",
                 "message" => $e->getMessage()

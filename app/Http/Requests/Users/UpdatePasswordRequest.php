@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ResetPasswordRequest extends FormRequest
+class UpdatePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,21 @@ class ResetPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'token'                     => 'required|string|exists:password_resets',
+            'current_password'          => 'required|string|password:sanctum',
             'new_password'              => 'required|string|min:6|confirmed',
             'new_password_confirmation' => 'required|string'
+        ];
+    }
+
+    /**
+     * Custom message for validation
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'current_password.password' => 'Current password is incorrect'
         ];
     }
 }

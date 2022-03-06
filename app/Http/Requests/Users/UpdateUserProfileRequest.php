@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfilePictureRequest extends FormRequest
+class UpdateUserProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,14 +17,16 @@ class UpdateProfilePictureRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply sto the request.
+     * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
     {
         return [
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'first_name'   => 'required|string',
+            'last_name'    => 'required|string',
+            'phone_number' => 'required|string|min:10|max:15'
         ];
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePasswordRequest extends FormRequest
+class InviteUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,21 +24,14 @@ class UpdatePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'current_password'          => 'required|string|password:sanctum',
-            'new_password'              => 'required|string|min:6|confirmed',
-            'new_password_confirmation' => 'required|string'
+            'invitee' => 'required|email|unique:users,email_address'
         ];
     }
 
-    /**
-     * Custom message for validation
-     *
-     * @return array
-     */
     public function messages()
     {
         return [
-            'current_password.password' => 'Current password is incorrect'
+            'invitee.unique' => 'User already exist'
         ];
     }
 }
