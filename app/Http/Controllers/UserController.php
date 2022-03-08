@@ -9,18 +9,19 @@ use App\Http\Requests\Users\UpdateProfilePictureRequest;
 use App\Http\Requests\Users\UpdateUserProfileRequest;
 use App\Services\UserService;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    protected $userService;
+    protected UserService $userService;
 
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
         try {
             $data = $this->userService->index();
@@ -29,7 +30,6 @@ class UserController extends Controller
                 "data"   => $data
             ], 200);
         } catch (Exception $e) {
-            dd($e);
             return response()->json([
                 "status"  => "error",
                 "message" => $e->getMessage()
@@ -37,7 +37,7 @@ class UserController extends Controller
         }
     }
 
-    public function profile(Request $request)
+    public function profile(Request $request): JsonResponse
     {
         try {
             $data = $this->userService->profile($request->user()->id);
@@ -54,7 +54,7 @@ class UserController extends Controller
         }
     }
 
-    public function updateProfile(UpdateUserProfileRequest $request)
+    public function updateProfile(UpdateUserProfileRequest $request): JsonResponse
     {
         try {
             $data = $this->userService->updateProfile($request->all(), $request->user()->id);
@@ -71,7 +71,7 @@ class UserController extends Controller
         }
     }
 
-    public function updateProfilePicture(UpdateProfilePictureRequest $request)
+    public function updateProfilePicture(UpdateProfilePictureRequest $request): JsonResponse
     {
         try {
             $data = $this->userService->updateProfilePicture($request->image, $request->user()->id);
@@ -81,7 +81,6 @@ class UserController extends Controller
                 "data"    => $data
             ], 200);
         } catch (Exception $e) {
-            dd($e);
             return response()->json([
                 "status"  => "error",
                 "message" => $e->getMessage()
@@ -89,7 +88,7 @@ class UserController extends Controller
         }
     }
 
-    public function updatePassword(UpdatePasswordRequest $request)
+    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
     {
         try {
             $this->userService->updatePassword($request->all(), $request->user()->id);
@@ -105,7 +104,7 @@ class UserController extends Controller
         }
     }
 
-    public function invite(InviteUserRequest $request)
+    public function invite(InviteUserRequest $request): JsonResponse
     {
         try {
             $this->userService->inviteUser($request->invitee, $request->user());
@@ -122,7 +121,7 @@ class UserController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         try {
             $this->userService->logout($request->user());
@@ -132,7 +131,6 @@ class UserController extends Controller
                 "message" => "Logged out successfully"
             ], 200);
         } catch (Exception $e) {
-            dd($e);
             return response()->json([
                 "status"  => "error",
                 "message" => $e->getMessage()

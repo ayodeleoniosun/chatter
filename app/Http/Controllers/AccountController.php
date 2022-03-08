@@ -8,18 +8,19 @@ use App\Http\Requests\Users\ResetPasswordRequest;
 use App\Http\Requests\Users\UserRegistrationRequest;
 use App\Services\AccountService;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {
-    protected $accountService;
+    protected AccountService $accountService;
 
     public function __construct(AccountService $accountService)
     {
         $this->accountService = $accountService;
     }
 
-    public function register(UserRegistrationRequest $request)
+    public function register(UserRegistrationRequest $request): JsonResponse
     {
         try {
             $user = $this->accountService->register($request->all());
@@ -36,7 +37,7 @@ class AccountController extends Controller
         }
     }
 
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         try {
             $data = $this->accountService->login($request->all());
@@ -53,7 +54,7 @@ class AccountController extends Controller
         }
     }
 
-    public function forgotPassword(Request $request)
+    public function forgotPassword(Request $request): JsonResponse
     {
         try {
             $this->accountService->forgotPassword($request->all());
@@ -70,7 +71,7 @@ class AccountController extends Controller
         }
     }
 
-    public function resetPassword(ResetPasswordRequest $request)
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
         try {
             $this->accountService->resetPassword($request->all());
@@ -87,7 +88,7 @@ class AccountController extends Controller
         }
     }
 
-    public function acceptInvitation(AcceptInvitationRequest $request)
+    public function acceptInvitation(AcceptInvitationRequest $request): JsonResponse
     {
         try {
             $this->accountService->acceptInvitation($request->all());
