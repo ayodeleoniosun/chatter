@@ -8,12 +8,7 @@ class Chat extends Model
 {
     protected $table = 'chats';
 
-    protected $fillable = [
-        'sender_id',
-        'recipient_id',
-        'content',
-        'content_type'
-    ];
+    protected $guarded = ['id'];
 
     public function sender()
     {
