@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Conversation extends Model
+class Message extends Model
 {
     protected $guarded = ['id'];
 
-    public function sender()
+    public function conversation()
     {
-        return $this->belongsTo(User::class, 'sender_id');
+        return $this->belongsTo(Conversation::class);
     }
 
-    public function recipient()
+    public function sender()
     {
-        return $this->belongsTo(User::class, 'recipient_id');
+        return $this->belongsTo(User::class);
     }
 }

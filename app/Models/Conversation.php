@@ -4,10 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Chat extends Model
+class Conversation extends Model
 {
-    protected $table = 'chats';
-
     protected $guarded = ['id'];
 
     public function sender()
@@ -18,10 +16,5 @@ class Chat extends Model
     public function recipient()
     {
         return $this->belongsTo(User::class, 'recipient_id');
-    }
-
-    public function file()
-    {
-        return $this->belongsTo(File::class, 'file_id');
     }
 }
