@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Chats\SendMessageRequest;
-use App\Services\ChatService;
+use App\Services\ConversationService;
 
-class ChatController extends Controller
+class ConversationController extends Controller
 {
-    protected ChatService $chatService;
+    protected ConversationService $conversationService;
 
-    public function __construct(ChatService $chatService)
+    public function __construct(ConversationService $conversationService)
     {
-        $this->chatService = $chatService;
+        $this->conversationService = $conversationService;
     }
 
     public function index()
@@ -22,13 +22,13 @@ class ChatController extends Controller
     public function send(SendMessageRequest $request)
     {
         try {
-            $user = $this->chatService->send($request->user(), $request->all());
+            $this->conversationService->send($request->user(), $request->all());
+
             return response()->json([
                 "status"  => "success",
                 "message" => "Message sent"
-            ], 200);
+            ], 201);
         } catch (\Exception $e) {
-            dd($e);
             return response()->json([
                 "status"  => "error",
                 "message" => $e->getMessage()

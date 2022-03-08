@@ -36,8 +36,8 @@ Route::group([
 Route::get('/users', 'UserController@index')->name('users.index');
 
 Route::group([
-    'prefix'     => 'chats',
+    'prefix'     => 'messages',
     'middleware' => ['auth:sanctum']
 ], function () {
-    Route::post('/send', 'ChatController@send')->name('chats.send');
+    Route::post('/send', 'ConversationController@send')->name('messages.send');
 });

@@ -16,4 +16,4 @@ Route::view('/', 'welcome');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('home');
+Route::get('/chat', [App\Http\Controllers\ConversationController::class, 'index'])->name('home');
