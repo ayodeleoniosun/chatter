@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,30 +17,35 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'accounts'], function () {
-    Route::post('/register', 'AccountController@register')->name('account.register');
-    Route::post('/login', 'AccountController@login')->name('account.login');
-    Route::post('/password/forgot', 'AccountController@forgotPassword')->name('account.password.forgot');
-    Route::post('/password/reset', 'AccountController@resetPassword')->name('account.password.reset');
-    Route::post('/invitation/accept', 'AccountController@acceptInvitation')->name('account.invitation.accept');
+    Route::controller(AccountController::class)->group(function () {
+        Route::post('/register', 'register')->name('account.register');
+        Route::post('/login', 'login')->name('account.login');
+        Route::post('/password/forgot', 'forgotPassword')->name('account.password.forgot');
+        Route::post('/password/reset', 'resetPassword')->name('account.password.reset');
+        Route::post('/invitation/accept', 'acceptInvitation')->name('account.invitation.accept');
+    });
 });
 
 Route::group([
     'prefix'     => 'users',
     'middleware' => ['auth:sanctum']
 ], function () {
-    Route::get('/profile', 'UserController@profile')->name('user.profile');
-    Route::put('/profile/update', 'UserController@updateProfile')->name('user.update.profile');
-    Route::put('/password/update', 'UserController@updatePassword')->name('user.update.password');
-    Route::post('/picture/update', 'UserController@updateProfilePicture')->name('user.update.picture');
-    Route::post('/invite', 'UserController@invite')->name('user.invite');
-    Route::get('/logout', 'UserController@logout')->name('user.logout');
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/profile', 'profile')->name('user.profile');
+        Route::put('/profile/update', 'updateProfile')->name('user.update.profile');
+        Route::put('/password/update', 'updatePassword')->name('user.update.password');
+        Route::post('/picture/update', 'updateProfilePicture')->name('user.update.picture');
+        Route::post('/invite', 'invite')->name('user.invite');
+        Route::get('/logout', 'logout')->name('user.logout');
+    });
 });
-
-Route::get('/users', 'UserController@index')->name('users.index');
 
 Route::group([
     'prefix'     => 'messages',
     'middleware' => ['auth:sanctum']
 ], function () {
-    Route::post('/send', 'ConversationController@send')->name('messages.send');
+    Route::controller(MessageController::class)->group(function () {
+        Route::get('', 'index')->name('messages.index');
+        Route::post('/send', 'send')->name('messages.send');
+    });
 });
