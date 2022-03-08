@@ -17,16 +17,6 @@ class User extends Authenticable
 
     protected $guarded = ['id'];
 
-    public function inboxes()
-    {
-        return $this->hasMany(PrivateMessage::class, 'recipient_id');
-    }
-
-    public function outboxes()
-    {
-        return $this->hasMany(PrivateMessage::class, 'sender_id');
-    }
-
     public function profilePicture()
     {
         return $this->belongsTo(UserProfilePicture::class);
