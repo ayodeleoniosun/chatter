@@ -3,17 +3,17 @@
 namespace App\Services;
 
 use App\Events\Chats\MessageSent;
-use App\Jobs\SaveConversation;
+use App\Jobs\SaveMessage;
 use App\Models\User;
-use App\Repositories\ConversationRepository;
+use App\Repositories\MessageRepository;
 
-class ConversationService
+class MessageService
 {
-    protected ConversationRepository $conversationRepository;
+    protected MessageRepository $messageRepository;
 
-    public function __construct(ConversationRepository $conversationRepository)
+    public function __construct(MessageRepository $messageRepository)
     {
-        $this->conversationRepository = $conversationRepository;
+        $this->messageRepository = $messageRepository;
     }
 
     public function send(User $sender, array $data): void
@@ -24,6 +24,6 @@ class ConversationService
 
         $data['sender_id'] = $sender->id;
         broadcast(new MessageSent($data));
-        SaveConversation::dispatch($data, $this->conversationRepository);
+        SaveMessage::dispatch($data, $this->messageRepository);
     }
 }

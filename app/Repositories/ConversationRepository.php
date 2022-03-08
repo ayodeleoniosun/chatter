@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Conversation;
-use App\Models\Message;
 
 class ConversationRepository
 {
@@ -14,7 +13,7 @@ class ConversationRepository
         $this->conversation = $conversation;
     }
 
-    public function save(array $data): Message
+    public function getOrCreateConversation(array $data): Conversation
     {
         $senderId = $data['sender_id'];
         $recipientId = $data['recipient_id'];
@@ -36,8 +35,6 @@ class ConversationRepository
             ]);
         }
 
-        $data['conversation_id'] = $conversation->id;
-
-        return app(MessageRepository::class)->save($data);
+        return $conversation;
     }
 }

@@ -2,40 +2,40 @@
 
 namespace App\Jobs;
 
-use App\Models\Conversation;
-use App\Repositories\ConversationRepository;
+use App\Models\Message;
+use App\Repositories\MessageRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SaveConversation implements ShouldQueue
+class SaveMessage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected array $data;
 
-    protected ConversationRepository $conversationRepository;
+    protected MessageRepository $messageRepository;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(array $data, ConversationRepository $conversationRepository)
+    public function __construct(array $data, MessageRepository $messageRepository)
     {
         $this->data = $data;
-        $this->conversationRepository = $conversationRepository;
+        $this->messageRepository = $messageRepository;
     }
 
     /**
      * Execute the job.
      *
-     * @return Conversation
+     * @return Message
      */
     public function handle()
     {
-        return $this->conversationRepository->save($this->data);
+        return $this->messageRepository->save($this->data);
     }
 }

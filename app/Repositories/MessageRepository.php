@@ -15,8 +15,10 @@ class MessageRepository
 
     public function save(array $data): Message
     {
+        $conversation = app(ConversationRepository::class)->getOrCreateConversation($data);
+
         return $this->message->create([
-            'conversation_id' => $data['conversation_id'],
+            'conversation_id' => $conversation->id,
             'sender_id'       => $data['sender_id'],
             'message'         => $data['message'],
         ]);
