@@ -14,10 +14,10 @@ class ChatRepository
         $this->chat = $chat;
     }
 
-    public function save(int $senderId, array $data): Chat
+    public function save(array $data): Chat
     {
         return $this->chat->create([
-            'sender_id'    => $senderId,
+            'sender_id'    => $data['sender_id'],
             'recipient_id' => $data['recipient_id'],
             'content'      => $data['message'],
         ]);
