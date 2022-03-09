@@ -33,6 +33,24 @@ class MessageController extends Controller
         }
     }
 
+    public function messages(Request $request, string $conversation): JsonResponse
+    {
+        try {
+            $messages = $this->messageService->messages($request->user()->id, $conversation);
+
+            return response()->json([
+                "status" => "success",
+                "data"   => $messages
+            ], 200);
+        } catch (\Exception $e) {
+            dd($e);
+            return response()->json([
+                "status"  => "error",
+                "message" => $e->getMessage()
+            ], $e->getStatusCode());
+        }
+    }
+
     public function send(SendMessageRequest $request): JsonResponse
     {
         try {

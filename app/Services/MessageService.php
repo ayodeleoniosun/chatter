@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\Chats\MessageSent;
 use App\Http\Resources\ConversationResource;
+use App\Http\Resources\MessageResource;
 use App\Jobs\SaveMessage;
 use App\Models\User;
 use App\Repositories\ConversationRepository;
@@ -39,5 +40,10 @@ class MessageService
         $data['sender_id'] = $sender->id;
         broadcast(new MessageSent($data));
         SaveMessage::dispatch($data, $this->messageRepository);
+    }
+
+    public function messages(string $user, string $conversation): ResourceCollection
+    {
+        return MessageResource::collection($this->messageRepository->messages($conversation, $user));
     }
 }

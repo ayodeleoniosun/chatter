@@ -43,4 +43,9 @@ class ConversationRepository
     {
         return Conversation::where('sender_id', $user)->orWhere('recipient_id', $user)->get();
     }
+
+    public function canViewConversation($conversationId, $user): void
+    {
+
+    }
 }
