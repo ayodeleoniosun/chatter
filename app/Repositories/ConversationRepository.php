@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Conversation;
+use Illuminate\Support\Collection;
 
 class ConversationRepository
 {
@@ -36,5 +37,10 @@ class ConversationRepository
         }
 
         return $conversation;
+    }
+
+    public function conversations($user): Collection
+    {
+        return Conversation::where('sender_id', $user)->orWhere('recipient_id', $user)->get();
     }
 }

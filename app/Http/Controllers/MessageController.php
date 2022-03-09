@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Chats\SendMessageRequest;
 use App\Services\MessageService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
@@ -16,9 +16,21 @@ class MessageController extends Controller
         $this->messageService = $messageService;
     }
 
-    public function index(): View
+    public function conversations(Request $request): JsonResponse
     {
-        return view('chats.index');
+        try {
+            $conversations = $this->messageService->conversations($request->user()->id);
+
+            return response()->json([
+                "status" => "success",
+                "data"   => $conversations
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "status"  => "error",
+                "message" => $e->getMessage()
+            ], $e->getStatusCode());
+        }
     }
 
     public function send(SendMessageRequest $request): JsonResponse
