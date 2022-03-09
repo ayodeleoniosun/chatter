@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Chats\SendMessageRequest;
+use App\Models\Message;
 use App\Services\MessageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -43,7 +44,6 @@ class MessageController extends Controller
                 "data"   => $messages
             ], 200);
         } catch (\Exception $e) {
-            dd($e);
             return response()->json([
                 "status"  => "error",
                 "message" => $e->getMessage()
@@ -60,6 +60,23 @@ class MessageController extends Controller
                 "status"  => "success",
                 "message" => "Message sent"
             ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                "status"  => "error",
+                "message" => $e->getMessage()
+            ], $e->getStatusCode());
+        }
+    }
+
+    public function delete(Request $request, string $message)
+    {
+        try {
+            $this->messageService->delete($request->user()->id, $message);
+
+            return response()->json([
+                "status"  => "success",
+                "message" => "Message deleted"
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 "status"  => "error",

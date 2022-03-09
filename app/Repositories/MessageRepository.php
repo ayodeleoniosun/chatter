@@ -28,9 +28,19 @@ class MessageRepository
         ]);
     }
 
-    public function messages($conversation, $user): Collection
+    public function messages($user, $conversation): Collection
     {
         return Message::where('conversation_id', $conversation)->get();
+    }
+
+    public function find($message): Message|null
+    {
+        return Message::find($message);
+    }
+
+    public function delete($message): bool
+    {
+        return $message->delete();
     }
 
 }

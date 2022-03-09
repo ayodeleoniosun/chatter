@@ -6,6 +6,7 @@ use App\Events\Chats\MessageSent;
 use App\Http\Resources\ConversationResource;
 use App\Http\Resources\MessageResource;
 use App\Jobs\SaveMessage;
+use App\Models\Message;
 use App\Models\User;
 use App\Repositories\ConversationRepository;
 use App\Repositories\MessageRepository;
@@ -44,6 +45,21 @@ class MessageService
 
     public function messages(string $user, string $conversation): ResourceCollection
     {
-        return MessageResource::collection($this->messageRepository->messages($conversation, $user));
+        return MessageResource::collection($this->messageRepository->messages($user, $conversation));
+    }
+
+    public function delete(string $user, string $messageId): bool
+    {
+        $message = $this->messageRepository->find($messageId);
+
+        if (!$message) {
+            abort(404, 'Message not found');
+        }
+
+        if ($user != $message->sender_id) {
+            abort(403, 'You cannot delete this message');
+        }
+
+        return $this->messageRepository->delete($message);
     }
 }

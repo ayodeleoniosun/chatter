@@ -18,9 +18,8 @@ class CreateMessagesTable extends Migration
             $table->foreignId('conversation_id')->constrained('conversations');
             $table->foreignId('sender_id')->constrained('users');
             $table->longText('message');
-            $table->boolean('deleted_by_sender')->default(false);
-            $table->boolean('deleted_by_recipient')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

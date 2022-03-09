@@ -26,10 +26,7 @@ Route::group(['prefix' => 'accounts'], function () {
     });
 });
 
-Route::group([
-    'prefix'     => 'users',
-    'middleware' => ['auth:sanctum']
-], function () {
+Route::group(['prefix' => 'users', 'middleware' => ['auth:sanctum']], function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/profile', 'profile')->name('user.profile');
         Route::put('/profile/update', 'updateProfile')->name('user.update.profile');
@@ -40,13 +37,14 @@ Route::group([
     });
 });
 
-Route::group([
-    'prefix'     => 'messages',
-    'middleware' => ['auth:sanctum']
-], function () {
+Route::group(['prefix' => 'messages', 'middleware' => ['auth:sanctum']], function () {
     Route::controller(MessageController::class)->group(function () {
-        Route::get('/conversations', 'conversations')->name('user.conversations');
-        Route::get('/conversations/{id}', 'messages')->name('conversation.messages');
         Route::post('/send', 'send')->name('messages.send');
+        Route::post('/delete/{id}', 'delete')->name('conversation.messages.delete');
+
+        Route::group(['prefix' => 'conversations'], function () {
+            Route::get('/', 'conversations')->name('user.conversations');
+            Route::get('/{id}', 'messages')->name('conversation.messages');
+        });
     });
 });
