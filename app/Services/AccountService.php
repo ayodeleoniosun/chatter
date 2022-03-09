@@ -16,7 +16,11 @@ class AccountService
     protected PasswordResetRepository $passwordResetRepository;
     protected InvitationRepository $invitationRepository;
 
-    public function __construct(AccountRepository $accountRepository, PasswordResetRepository $passwordResetRepository, InvitationRepository $invitationRepository)
+    public function __construct(
+        AccountRepository       $accountRepository,
+        PasswordResetRepository $passwordResetRepository,
+        InvitationRepository    $invitationRepository
+    )
     {
         $this->accountRepository = $accountRepository;
         $this->passwordResetRepository = $passwordResetRepository;

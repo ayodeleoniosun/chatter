@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserProfilePicture extends Model
 {
@@ -10,12 +11,12 @@ class UserProfilePicture extends Model
 
     protected $guarded = ['id'];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function file()
+    public function file(): BelongsTo
     {
         return $this->belongsTo(File::class);
     }

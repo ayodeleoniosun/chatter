@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class File extends Model
 {
@@ -10,12 +11,7 @@ class File extends Model
 
     protected $guarded = ['id'];
 
-    public function chat()
-    {
-        return $this->hasOne(Chat::class, 'file_id');
-    }
-
-    public function profilePicture()
+    public function profilePicture(): HasOne
     {
         return $this->hasOne(UserProfilePicture::class, 'file_id');
     }
