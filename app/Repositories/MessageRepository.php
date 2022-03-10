@@ -28,8 +28,10 @@ class MessageRepository
         ]);
     }
 
-    public function messages(string $conversation): Collection
+    public function messages(int $authUserId, int $conversation): Collection
     {
+        $this->readConversationUnreadMessages($authUserId, $conversation);
+
         return Message::where('conversation_id', $conversation)->get();
     }
 
@@ -41,5 +43,23 @@ class MessageRepository
     public function delete(Message $message): bool
     {
         return $message->delete();
+    }
+
+    public function getConversationUnreadMessages(int $authUserId, int $conversationId): Collection
+    {
+        return Message::where([
+            ['conversation_id', $conversationId],
+            ['sender_id', '<>', $authUserId],
+            ['is_read', false]
+        ])->get();
+    }
+
+    private function readConversationUnreadMessages(int $authUserId, int $conversationId)
+    {
+        $this->getConversationUnreadMessages($authUserId, $conversationId)->map(function ($message) {
+            $message->is_read = true;
+            $message->read_at = now();
+            $message->save();
+        });
     }
 }

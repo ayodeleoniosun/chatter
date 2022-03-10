@@ -51,7 +51,7 @@ class MessageService
             abort(403, 'You cannot view this conversation messages');
         }
 
-        return MessageResource::collection($this->messageRepository->messages($conversation));
+        return MessageResource::collection($this->messageRepository->messages($user, $conversation));
     }
 
     public function delete(string $user, string $messageId): bool

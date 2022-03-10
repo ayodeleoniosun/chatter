@@ -20,21 +20,23 @@ class MessageResource extends JsonResource
             'conversation_id' => $this->conversation_id,
             'sender_id'       => $this->sender_id,
             'sender'          => $this->sender->fullname,
-            'created_at'      => $this->parseDate(),
+            'is_read'         => $this->is_read,
+            'read_at'         => $this->is_read ? $this->parseDate($this->read_at) : null,
+            'created_at'      => $this->parseDate($this->created_at),
         ];
     }
 
-    private function parseDate(): string
+    private function parseDate($date): string
     {
-        $date = Carbon::parse($this->created_at);
-        $time = $date->format("h:i A");
+        $parsedDate = Carbon::parse($date);
+        $time = $parsedDate->format("h:i A");
 
-        if ($date->isToday()) {
+        if ($parsedDate->isToday()) {
             return $time;
-        } elseif ($date->isYesterday()) {
+        } elseif ($parsedDate->isYesterday()) {
             return "Yesterday, {$time}";
         } else {
-            return $date->format("d/m/Y") . ", {$time}";
+            return $parsedDate->format("d/m/Y") . ", {$time}";
         }
     }
 }
