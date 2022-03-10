@@ -45,6 +45,12 @@ class MessageService
 
     public function messages(string $user, string $conversation): ResourceCollection
     {
+        $canViewConversation = app(ConversationRepository::class)->canViewConversation($user, $conversation);
+
+        if (!$canViewConversation) {
+            abort(403, 'You cannot view this conversation messages');
+        }
+
         return MessageResource::collection($this->messageRepository->messages($user, $conversation));
     }
 
