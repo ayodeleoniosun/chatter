@@ -29,9 +29,12 @@ class ForgotPasswordMail extends Mailable
      */
     public function build()
     {
-        return $this->from(config('mail.from.address', 'Reset Password'))->subject('Hey, You forgot your password')->markdown('emails.forgot-password')->with([
-            'first_name' => ucfirst($this->data->user->first_name),
-            'url'        => $this->data->link
-        ]);
+        return $this->from(config('mail.from.address', 'Reset Password'))
+            ->subject('Hey, You forgot your password')
+            ->markdown('emails.forgot-password')
+            ->with([
+                'first_name' => ucfirst($this->data->user->first_name),
+                'url'        => $this->data->link
+            ]);
     }
 }

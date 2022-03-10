@@ -29,9 +29,12 @@ class InvitationMail extends Mailable
      */
     public function build()
     {
-        return $this->from(config('mail.from.address', 'Invitation to chatter'))->subject('Hey, you are invited')->markdown('emails.invitation')->with([
-            'invited_by' => ucfirst($this->data->user->first_name),
-            'url'        => $this->data->invitation_link
-        ]);
+        return $this->from(config('mail.from.address', 'Invitation to chatter'))
+            ->subject('Hey, you are invited')
+            ->markdown('emails.invitation')
+            ->with([
+                'invited_by' => ucfirst($this->data->user->first_name),
+                'url'        => $this->data->invitation_link
+            ]);
     }
 }

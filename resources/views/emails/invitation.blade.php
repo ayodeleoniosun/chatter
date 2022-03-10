@@ -1,21 +1,20 @@
-@component('mail::message')
-    <p> Hi {{ $invited_by }}, </p>
-    <p> We received a request to reset the password for your account. </p>
-    <p> Click the button below to reset your password </p>
+@extends('emails.layout')
 
-    @component('mail::button', ['url' => $url])
-        Reset Password
-    @endcomponent
+@section('content')
+    <p> {{ $invited_by }} invited you to join chatter. </p>
+    <p> Click the button below to accept the invitation </p>
 
-    <p> or copy and paste the URL into your browser <p/>
+    <p><a href="{{ $url }}">
+            <button class="btn btn-primary"> Accept invitation</button>
+        </a></p>
 
-    <a href="{{ $url }}"> {{ $url }} </a>
+    <p> or copy and paste the URL into your browser </p>
 
-    <p> Ensure that the password is reset within the next ten minutes, else, the link becomes invalid. </p>
+    <p><a href="{{ $url }}"> {{ $url }} </a></p> <br/>
 
     Thanks.
 
-@endcomponent
+@endsection
 
 
 

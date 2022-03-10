@@ -25,7 +25,7 @@ class UserService
     public function index()
     {
         $users = $this->userRepository->getUsers();
-        return $users->map(fn (User $user) => new UserResource($user));
+        return $users->map(fn(User $user) => new UserResource($user));
     }
 
     public function updateProfile(array $data, int $id): UserResource
@@ -65,7 +65,7 @@ class UserService
     public function inviteUser(string $invitee, User $user): Invitation
     {
         $token = Str::random(60);
-        $invitationLink = config('app . url') . ' / invitations ? token = ' . $token;
+        $invitationLink = config('app.url') . '/invitations?token = ' . $token;
         $expiration = Carbon::now()->addDays(2)->toDateTimeString();
 
         $data = json_encode([
