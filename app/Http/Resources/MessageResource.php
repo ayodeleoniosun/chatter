@@ -35,8 +35,8 @@ class MessageResource extends JsonResource
             return $time;
         } elseif ($parsedDate->isYesterday()) {
             return "Yesterday, {$time}";
-        } else {
-            return $parsedDate->format("d/m/Y") . ", {$time}";
         }
+
+        return $parsedDate->format("d/m/Y") . ", {$time}";
     }
 }
