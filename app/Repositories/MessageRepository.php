@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Support\Collection;
 

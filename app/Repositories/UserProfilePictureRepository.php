@@ -1,10 +1,10 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Repositories;
 
 use App\Enums\FileType;
-use App\Models\{File, User, UserProfilePicture};
+use App\Models\{User, UserProfilePicture};
+
 class UserProfilePictureRepository
 {
     private UserProfilePicture $picture;
