@@ -24,7 +24,7 @@ class MessageResource extends JsonResource
         ];
     }
 
-    public function parseDate(): string
+    private function parseDate(): string
     {
         $date = Carbon::parse($this->created_at);
         $time = $date->format("h:i A");
