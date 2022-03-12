@@ -26,8 +26,8 @@ class ProfileTest extends TestCase
     public function can_view_profile()
     {
         $response = $this->getJson($this->apiBaseUrl . '/users/profile');
-        $response->assertOk();
 
+        $response->assertOk();
         $response->assertJson(fn(AssertableJson $json) => $json->hasAll('status', 'data'));
         $this->assertEquals('success', $response->getData()->status);
         $this->assertEquals($response->getData()->data->first_name, $this->user->first_name);
@@ -45,6 +45,7 @@ class ProfileTest extends TestCase
         ];
 
         $response = $this->putJson($this->apiBaseUrl . '/users/profile/update', $data);
+
         $response->assertUnprocessable();
         $this->assertEquals('The given data was invalid.', $response->getData()->message);
         $this->assertEquals('The last name field is required.', $response->getData()->errors->last_name[0]);
@@ -62,6 +63,7 @@ class ProfileTest extends TestCase
         ];
 
         $response = $this->putJson($this->apiBaseUrl . '/users/profile/update', $data);
+
         $response->assertForbidden();
         $this->assertEquals('error', $response->getData()->status);
         $this->assertEquals('Phone number belongs to another user', $response->getData()->message);
@@ -94,6 +96,7 @@ class ProfileTest extends TestCase
         ];
 
         $response = $this->putJson($this->apiBaseUrl . '/users/password/update', $data);
+
         $response->assertUnprocessable();
         $this->assertEquals('The given data was invalid.', $response->getData()->message);
         $this->assertEquals('Current password is incorrect', $response->getData()->errors->current_password[0]);
@@ -108,6 +111,7 @@ class ProfileTest extends TestCase
         ];
 
         $response = $this->putJson($this->apiBaseUrl . '/users/password/update', $data);
+
         $response->assertUnprocessable();
         $this->assertEquals('The given data was invalid.', $response->getData()->message);
         $this->assertEquals('The new password must be at least 6 characters.', $response->getData()->errors->new_password[0]);
@@ -122,6 +126,7 @@ class ProfileTest extends TestCase
         ];
 
         $response = $this->putJson($this->apiBaseUrl . '/users/password/update', $data);
+
         $response->assertUnprocessable();
         $this->assertEquals('The given data was invalid.', $response->getData()->message);
         $this->assertEquals('The new password confirmation does not match.', $response->getData()->errors->new_password[0]);
@@ -137,6 +142,7 @@ class ProfileTest extends TestCase
         ];
 
         $response = $this->putJson($this->apiBaseUrl . '/users/password/update', $data);
+
         $response->assertOk();
         $this->assertEquals('success', $response->getData()->status);
         $this->assertEquals('Password successfully updated', $response->getData()->message);
@@ -148,6 +154,7 @@ class ProfileTest extends TestCase
         $data = ['image' => 'filename.jpg'];
 
         $response = $this->postJson($this->apiBaseUrl . '/users/picture/update', $data);
+
         $response->assertUnprocessable();
         $this->assertEquals('The given data was invalid.', $response->getData()->message);
         $this->assertEquals('The image must be an image.', $response->getData()->errors->image[0]);
@@ -162,6 +169,7 @@ class ProfileTest extends TestCase
         $data = ['image' => $file];
 
         $response = $this->postJson($this->apiBaseUrl . '/users/picture/update', $data);
+
         $response->assertOk();
         $this->assertEquals('success', $response->getData()->status);
         $this->assertEquals('Profile picture successfully updated', $response->getData()->message);

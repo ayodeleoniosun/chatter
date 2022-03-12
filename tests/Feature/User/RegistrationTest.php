@@ -22,6 +22,7 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $data);
+
         $response->assertUnprocessable();
         $this->assertEquals('The given data was invalid.', $response->getData()->message);
         $this->assertEquals('The password must be at least 6 characters.', $response->getData()->errors->password[0]);
@@ -37,6 +38,7 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $data);
+
         $response->assertUnprocessable();
         $this->assertEquals('The given data was invalid.', $response->getData()->message);
         $this->assertEquals('The last name field is required.', $response->getData()->errors->last_name[0]);
@@ -47,7 +49,9 @@ class RegistrationTest extends TestCase
     public function cannot_register_if_email_address_or_phone_number_exist()
     {
         $user = $this->createUser();
+
         $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $user->getAttributes());
+
         $response->assertUnprocessable();
         $this->assertEquals('The given data was invalid.', $response->getData()->message);
         $this->assertEquals('The phone number has already been taken.', $response->getData()->errors->phone_number[0]);
@@ -66,6 +70,7 @@ class RegistrationTest extends TestCase
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $data);
+
         $response->assertCreated();
         $this->assertEquals('success', $response->getData()->status);
         $this->assertEquals('Registration successful', $response->getData()->message);

@@ -14,9 +14,11 @@ class AuthenticationTest extends TestCase
     public function can_login_with_valid_credentials()
     {
         $user = $this->createUser();
+
         $data = ['email_address' => $user->email_address, 'password' => '12345678'];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/login', $data);
+
         $response->assertOk();
         $response->assertJsonStructure([
             'status',
@@ -42,6 +44,7 @@ class AuthenticationTest extends TestCase
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/login', $data);
+
         $response->assertUnauthorized();
         $this->assertEquals('error', $response->getData()->status);
         $this->assertEquals('Incorrect login credentials', $response->getData()->message);
