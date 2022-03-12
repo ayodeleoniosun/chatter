@@ -12,8 +12,9 @@ trait CreateUsers
         return User::factory()->create();
     }
 
-    protected function authUser()
+    protected function authUser($user = null)
     {
-        return Sanctum::actingAs($this->createUser());
+        $user = is_null($user) ? $this->createUser() : $user;
+        return Sanctum::actingAs($user);
     }
 }

@@ -19,17 +19,17 @@ class AuthenticationTest extends TestCase
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/login', $data);
 
-        $response->assertOk();
-        $response->assertJsonStructure([
-            'status',
-            'message',
-            'data' => [
-                'user' => ['id', 'first_name', 'last_name', 'email_address', 'phone_number', 'profile_picture',
-                    'previous_profile_pictures', 'created_at', 'updated_at'
-                ],
-                'token'
-            ]
-        ]);
+        $response->assertOk()
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'user' => ['id', 'first_name', 'last_name', 'email_address', 'phone_number', 'profile_picture',
+                        'previous_profile_pictures', 'created_at', 'updated_at'
+                    ],
+                    'token'
+                ]
+            ]);
 
         $this->assertEquals('success', $response->getData()->status);
         $this->assertEquals('Login successful', $response->getData()->message);
