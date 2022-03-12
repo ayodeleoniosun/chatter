@@ -14,8 +14,13 @@ class AddNewColumnsToMessagesTable extends Migration
     public function up()
     {
         Schema::table('messages', function (Blueprint $table) {
-            $table->boolean('is_read')->default(false)->after('message');
+            $table->string('message_type')->default('text')->after('message');
+            $table->bigInteger('attachment_id')->after('message_type')->unsigned()->nullable();
+            $table->boolean('is_read')->default(false)->after('attachment_id');
             $table->dateTime('read_at')->nullable()->after('is_read');
+
+            $table->foreign('attachment_id')->references('id')->on('files');
+
         });
     }
 
@@ -27,7 +32,7 @@ class AddNewColumnsToMessagesTable extends Migration
     public function down()
     {
         Schema::table('messages', function (Blueprint $table) {
-            $table->dropColumn(['is_read', 'read_at']);
+            $table->dropColumn(['message_type', 'attachment_id', 'is_read', 'read_at']);
         });
     }
 }
