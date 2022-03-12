@@ -48,7 +48,7 @@ class MessageService
         $canViewConversation = app(ConversationRepository::class)->canViewConversation($user, $conversation);
 
         if (!$canViewConversation) {
-            abort(403, 'You cannot view this conversation messages');
+            abort(403, 'You cannot view this conversation messages.');
         }
 
         return MessageResource::collection($this->messageRepository->messages($user, $conversation));
@@ -59,11 +59,11 @@ class MessageService
         $message = $this->messageRepository->find($messageId);
 
         if (!$message) {
-            abort(404, 'Message not found');
+            abort(404, 'Message not found.');
         }
 
         if ($user != $message->sender_id) {
-            abort(403, 'You cannot delete this message');
+            abort(403, 'You cannot delete this message.');
         }
 
         return $this->messageRepository->delete($message);

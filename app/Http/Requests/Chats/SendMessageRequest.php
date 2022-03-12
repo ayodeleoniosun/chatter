@@ -25,7 +25,7 @@ class SendMessageRequest extends FormRequest
     {
         return [
             'message'      => 'required|string',
-            'recipient_id' => 'exists:users,id'
+            'recipient_id' => 'required|exists:users,id'
         ];
     }
 }
