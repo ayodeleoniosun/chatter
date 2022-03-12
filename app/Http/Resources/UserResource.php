@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             'fullname'                  => $this->fullname,
             'phone_number'              => $this->phone_number,
             'email_address'             => $this->email_address,
-            'profile_picture'           => $this->profilePicture->file->filename ?? null,
+            'profile_picture'           => $this->profilePicture->file->path ?? null,
             'previous_profile_pictures' => UserProfilePictureResource::collection($this->profilePictures->where('id', '<>', $this->profile_picture_id)),
             'created_at'                => $this->created_at,
             'updated_at'                => $this->updated_at,

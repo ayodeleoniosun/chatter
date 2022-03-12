@@ -14,22 +14,18 @@ class UserProfilePictureRepository
         $this->picture = $picture;
     }
 
-    public function save(string $filename, int $id): User
+    public function save(array $data, int $userId): User
     {
         $file = app(FileRepository::class)->create([
-            'filename'  => $filename,
-            'type'      => FileType::PROFILE_PICTURE,
-            'object_id' => $id
+            'path' => $data['path']
         ]);
 
-        $data = [
-            'user_id' => $id,
+        $picture = $this->picture->create([
+            'user_id' => $userId,
             'file_id' => $file->id
-        ];
+        ]);
 
-        $picture = $this->picture->create($data);
-
-        $user = app(UserRepository::class)->getUser($id);
+        $user = app(UserRepository::class)->getUser($userId);
         $user->profile_picture_id = $picture->id;
         $user->save();
 

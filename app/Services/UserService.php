@@ -50,15 +50,19 @@ class UserService
         return new UserResource($user);
     }
 
-    public function updateProfilePicture(object $image, int $id): UserResource
+    public function updateProfilePicture(object $image, int $userId): UserResource
     {
-        $filename = time() . ' . ' . $image->extension();
+        $extension = $image->extension();
+        $filename = $userId . '' . time() . ' . ' . $extension;
 
-        Storage::disk('s3')->put($filename, file_get_contents($image->getRealPath()));
+        Storage::disk('profile_pictures')->put($filename, file_get_contents($image->getRealPath()));
 
-        $user = $this->userRepository->updateProfilePicture($filename, $id);
+        $data = [
+            'extension' => $extension,
+            'path'      => Storage::disk('profile_pictures')->url($filename)
+        ];
 
-        return new UserResource($user);
+        return new UserResource($this->userRepository->updateProfilePicture($data, $userId));
     }
 
     public function updatePassword(array $data, int $id): User

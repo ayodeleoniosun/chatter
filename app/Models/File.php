@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -14,8 +15,8 @@ class File extends Model
 
     protected $guarded = ['id'];
 
-    public function profilePicture(): HasOne
+    public function profilePictures(): HasMany
     {
-        return $this->hasOne(UserProfilePicture::class, 'file_id');
+        return $this->hasMany(UserProfilePicture::class, 'file_id');
     }
 }

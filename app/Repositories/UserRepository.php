@@ -54,9 +54,9 @@ class UserRepository
         return $user;
     }
 
-    public function updateProfilePicture(string $filename, int $id): User
+    public function updateProfilePicture(array $data, int $userId): User
     {
-        return app(UserProfilePictureRepository::class)->save($filename, $id);
+        return app(UserProfilePictureRepository::class)->save($data, $userId);
     }
 
     public function inviteUser(string $email, int $id)

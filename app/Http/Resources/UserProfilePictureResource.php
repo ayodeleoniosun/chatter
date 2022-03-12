@@ -16,7 +16,7 @@ class UserProfilePictureResource extends JsonResource
     {
         return [
             'id'   => $this->id,
-            'file' => $this->file->filename
+            'file' => $this->file->path
         ];
     }
 }
