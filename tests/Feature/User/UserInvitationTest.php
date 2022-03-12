@@ -18,10 +18,10 @@ class UserInvitationTest extends TestCase
         $user = $this->authUser();
         $data = ['invitee' => $user->email_address];
 
-        $response = $this->postJson($this->baseUrl . '/users/invite', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/users/invite', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->invitee[0], 'User already exist');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('User already exist', $response->getData()->errors->invitee[0]);
     }
 
     /** @test */
@@ -32,9 +32,9 @@ class UserInvitationTest extends TestCase
         $this->authUser();
         $data = ['invitee' => 'new@email.com'];
 
-        $response = $this->postJson($this->baseUrl . '/users/invite', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/users/invite', $data);
         $response->assertOk();
-        $this->assertEquals($response->getData()->status, 'success');
+        $this->assertEquals('success', $response->getData()->status);
         $this->assertEquals($response->getData()->message, 'Invitation successfully sent to user');
 
         Mail::assertQueued(InvitationMail::class);
@@ -51,10 +51,10 @@ class UserInvitationTest extends TestCase
             'password'      => '12345678'
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/invitation/accept', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/invitation/accept', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->token[0], 'The token field is required.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The token field is required.', $response->getData()->errors->token[0]);
     }
 
 
@@ -63,10 +63,10 @@ class UserInvitationTest extends TestCase
     {
         $data = ['token' => '1234568'];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/invitation/accept', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/invitation/accept', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->token[0], 'The selected token is invalid.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The selected token is invalid.', $response->getData()->errors->token[0]);
     }
 
     /** @test */
@@ -74,21 +74,21 @@ class UserInvitationTest extends TestCase
     {
         $data = ['password' => '12345'];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/invitation/accept', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/invitation/accept', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->password[0], 'The password must be at least 6 characters.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The password must be at least 6 characters.', $response->getData()->errors->password[0]);
     }
 
     /** @test */
     public function cannot_accept_invitation_if_email_address_or_phone_number_exist()
     {
         $user = $this->createUser();
-        $response = $this->postJson($this->baseUrl . '/accounts/invitation/accept', $user->getAttributes());
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/invitation/accept', $user->getAttributes());
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->phone_number[0], 'The phone number has already been taken.');
-        $this->assertEquals($response->getData()->errors->email_address[0], 'The email address has already been taken.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The phone number has already been taken.', $response->getData()->errors->phone_number[0]);
+        $this->assertEquals('The email address has already been taken.', $response->getData()->errors->email_address[0]);
     }
 
     /** @test */
@@ -109,9 +109,9 @@ class UserInvitationTest extends TestCase
             'password'      => bcrypt('123456789')
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/invitation/accept', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/invitation/accept', $data);
         $response->assertOk();
-        $this->assertEquals($response->getData()->status, 'success');
-        $this->assertEquals($response->getData()->message, 'Invitation accepted successfully');
+        $this->assertEquals('success', $response->getData()->status);
+        $this->assertEquals('Invitation accepted successfully', $response->getData()->message);
     }
 }

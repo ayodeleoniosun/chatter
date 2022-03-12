@@ -23,30 +23,13 @@ class ProfileTest extends TestCase
     }
 
     /** @test */
-    public function can_view_all_users()
-    {
-        $response = $this->getJson($this->baseUrl . '/users');
-        $response->assertOk();
-
-        $this->assertEquals($response->getData()->status, 'success');
-        $response->assertJsonStructure([
-            'status',
-            'data' => [
-                '*' => ['id', 'first_name', 'last_name', 'email_address', 'phone_number', 'profile_picture',
-                    'previous_profile_pictures', 'created_at', 'updated_at'
-                ]
-            ]
-        ]);
-    }
-
-    /** @test */
     public function can_view_profile()
     {
-        $response = $this->getJson($this->baseUrl . '/users/profile');
+        $response = $this->getJson($this->apiBaseUrl . '/users/profile');
         $response->assertOk();
 
         $response->assertJson(fn(AssertableJson $json) => $json->hasAll('status', 'data'));
-        $this->assertEquals($response->getData()->status, 'success');
+        $this->assertEquals('success', $response->getData()->status);
         $this->assertEquals($response->getData()->data->first_name, $this->user->first_name);
         $this->assertEquals($response->getData()->data->last_name, $this->user->last_name);
         $this->assertEquals($response->getData()->data->email_address, $this->user->email_address);
@@ -61,10 +44,10 @@ class ProfileTest extends TestCase
             'phone_number' => '08123456789',
         ];
 
-        $response = $this->putJson($this->baseUrl . '/users/profile/update', $data);
+        $response = $this->putJson($this->apiBaseUrl . '/users/profile/update', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->last_name[0], 'The last name field is required.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The last name field is required.', $response->getData()->errors->last_name[0]);
     }
 
     /** @test */
@@ -78,10 +61,10 @@ class ProfileTest extends TestCase
             'phone_number' => $user->phone_number,
         ];
 
-        $response = $this->putJson($this->baseUrl . '/users/profile/update', $data);
+        $response = $this->putJson($this->apiBaseUrl . '/users/profile/update', $data);
         $response->assertForbidden();
-        $this->assertEquals($response->getData()->status, 'error');
-        $this->assertEquals($response->getData()->message, 'Phone number belongs to another user');
+        $this->assertEquals('error', $response->getData()->status);
+        $this->assertEquals('Phone number belongs to another user', $response->getData()->message);
     }
 
     /** @test */
@@ -93,11 +76,11 @@ class ProfileTest extends TestCase
             'phone_number' => Str::random(11),
         ];
 
-        $response = $this->putJson($this->baseUrl . '/users/profile/update', $data);
+        $response = $this->putJson($this->apiBaseUrl . '/users/profile/update', $data);
 
         $response->assertOk();
-        $this->assertEquals($response->getData()->status, 'success');
-        $this->assertEquals($response->getData()->message, 'Profile successfully updated');
+        $this->assertEquals('success', $response->getData()->status);
+        $this->assertEquals('Profile successfully updated', $response->getData()->message);
         $this->assertEquals($response->getData()->data->first_name, $data['first_name']);
         $this->assertEquals($response->getData()->data->last_name, $data['last_name']);
         $this->assertEquals($response->getData()->data->phone_number, $data['phone_number']);
@@ -110,10 +93,10 @@ class ProfileTest extends TestCase
             'current_password' => '12345',
         ];
 
-        $response = $this->putJson($this->baseUrl . '/users/password/update', $data);
+        $response = $this->putJson($this->apiBaseUrl . '/users/password/update', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->current_password[0], 'Current password is incorrect');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('Current password is incorrect', $response->getData()->errors->current_password[0]);
     }
 
     /** @test */
@@ -124,10 +107,10 @@ class ProfileTest extends TestCase
             'new_password_confirmation' => '12345',
         ];
 
-        $response = $this->putJson($this->baseUrl . '/users/password/update', $data);
+        $response = $this->putJson($this->apiBaseUrl . '/users/password/update', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->new_password[0], 'The new password must be at least 6 characters.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The new password must be at least 6 characters.', $response->getData()->errors->new_password[0]);
     }
 
     /** @test */
@@ -138,10 +121,10 @@ class ProfileTest extends TestCase
             'new_password_confirmation' => '12345678',
         ];
 
-        $response = $this->putJson($this->baseUrl . '/users/password/update', $data);
+        $response = $this->putJson($this->apiBaseUrl . '/users/password/update', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->new_password[0], 'The new password confirmation does not match.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The new password confirmation does not match.', $response->getData()->errors->new_password[0]);
     }
 
     /** @test */
@@ -153,10 +136,10 @@ class ProfileTest extends TestCase
             'new_password_confirmation' => '123456789',
         ];
 
-        $response = $this->putJson($this->baseUrl . '/users/password/update', $data);
+        $response = $this->putJson($this->apiBaseUrl . '/users/password/update', $data);
         $response->assertOk();
-        $this->assertEquals($response->getData()->status, 'success');
-        $this->assertEquals($response->getData()->message, 'Password successfully updated');
+        $this->assertEquals('success', $response->getData()->status);
+        $this->assertEquals('Password successfully updated', $response->getData()->message);
     }
 
     /** @test */
@@ -164,11 +147,11 @@ class ProfileTest extends TestCase
     {
         $data = ['image' => 'filename.jpg'];
 
-        $response = $this->postJson($this->baseUrl . '/users/picture/update', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/users/picture/update', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->image[0], 'The image must be an image.');
-        $this->assertEquals($response->getData()->errors->image[1], 'The image must be a file of type: jpeg, png, jpg.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The image must be an image.', $response->getData()->errors->image[0]);
+        $this->assertEquals('The image must be a file of type: jpeg, png, jpg.', $response->getData()->errors->image[1]);
     }
 
     /** @test */
@@ -178,10 +161,10 @@ class ProfileTest extends TestCase
         $file = UploadedFile::fake()->image('avatar.png');
         $data = ['image' => $file];
 
-        $response = $this->postJson($this->baseUrl . '/users/picture/update', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/users/picture/update', $data);
         $response->assertOk();
-        $this->assertEquals($response->getData()->status, 'success');
-        $this->assertEquals($response->getData()->message, 'Profile picture successfully updated');
+        $this->assertEquals('success', $response->getData()->status);
+        $this->assertEquals('Profile picture successfully updated', $response->getData()->message);
         $this->assertNotNull($response->getData()->data->profile_picture);
     }
 }

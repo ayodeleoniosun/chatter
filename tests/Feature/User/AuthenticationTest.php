@@ -16,7 +16,7 @@ class AuthenticationTest extends TestCase
         $user = $this->createUser();
         $data = ['email_address' => $user->email_address, 'password' => '12345678'];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/login', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/login', $data);
         $response->assertOk();
         $response->assertJsonStructure([
             'status',
@@ -28,8 +28,9 @@ class AuthenticationTest extends TestCase
                 'token'
             ]
         ]);
-        $this->assertEquals($response->getData()->status, 'success');
-        $this->assertEquals($response->getData()->message, 'Login successful');
+
+        $this->assertEquals('success', $response->getData()->status);
+        $this->assertEquals('Login successful', $response->getData()->message);
     }
 
     /** @test */
@@ -40,9 +41,9 @@ class AuthenticationTest extends TestCase
             'password'      => '123456789'
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/login', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/login', $data);
         $response->assertUnauthorized();
-        $this->assertEquals($response->getData()->status, 'error');
-        $this->assertEquals($response->getData()->message, 'Incorrect login credentials');
+        $this->assertEquals('error', $response->getData()->status);
+        $this->assertEquals('Incorrect login credentials', $response->getData()->message);
     }
 }

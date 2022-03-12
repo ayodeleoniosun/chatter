@@ -8,12 +8,13 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    public $baseUrl;
+    protected string $baseUrl = 'http://chatter.test:8082';
+    protected string $apiBaseUrl;
 
     public function setup(): void
     {
+        $this->apiBaseUrl = $this->baseUrl . '/api/v1';
         parent::setUp();
-        $this->baseUrl = sprintf('http://%s/api', config('app.domain'));
         $this->faker = \Faker\Factory::create();
     }
 }

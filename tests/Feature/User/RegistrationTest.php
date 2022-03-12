@@ -21,10 +21,10 @@ class RegistrationTest extends TestCase
             'password'      => '12345'
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/register', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->password[0], 'The password must be at least 6 characters.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The password must be at least 6 characters.', $response->getData()->errors->password[0]);
     }
 
     /** @test */
@@ -36,22 +36,22 @@ class RegistrationTest extends TestCase
             'password'     => '1234567'
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/register', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->last_name[0], 'The last name field is required.');
-        $this->assertEquals($response->getData()->errors->email_address[0], 'The email address field is required.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The last name field is required.', $response->getData()->errors->last_name[0]);
+        $this->assertEquals('The email address field is required.', $response->getData()->errors->email_address[0]);
     }
 
     /** @test */
     public function cannot_register_if_email_address_or_phone_number_exist()
     {
         $user = $this->createUser();
-        $response = $this->postJson($this->baseUrl . '/accounts/register', $user->getAttributes());
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $user->getAttributes());
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->phone_number[0], 'The phone number has already been taken.');
-        $this->assertEquals($response->getData()->errors->email_address[0], 'The email address has already been taken.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The phone number has already been taken.', $response->getData()->errors->phone_number[0]);
+        $this->assertEquals('The email address has already been taken.', $response->getData()->errors->email_address[0]);
     }
 
     /** @test */
@@ -65,11 +65,11 @@ class RegistrationTest extends TestCase
             'password'      => bcrypt('123456789')
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/register', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $data);
         $response->assertCreated();
-        $this->assertEquals($response->getData()->status, 'success');
-        $this->assertEquals($response->getData()->message, 'Registration successful');
-        $this->assertEquals($response->getData()->data->first_name, $data['first_name']);
+        $this->assertEquals('success', $response->getData()->status);
+        $this->assertEquals('Registration successful', $response->getData()->message);
+        $this->assertEquals($data['first_name'], $response->getData()->data->first_name);
         $this->assertEquals($response->getData()->data->last_name, $data['last_name']);
         $this->assertEquals($response->getData()->data->email_address, $data['email_address']);
         $this->assertEquals($response->getData()->data->phone_number, $data['phone_number']);

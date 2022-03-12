@@ -17,10 +17,10 @@ class ResetPasswordTest extends TestCase
     /** @test */
     public function cannot_send_forgot_password_link_to_non_existent_email()
     {
-        $response = $this->postJson($this->baseUrl . '/accounts/password/forgot', ['email_address' => 'invalid@email.com']);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/password/forgot', ['email_address' => 'invalid@email.com']);
         $response->assertNotFound();
-        $this->assertEquals($response->getData()->status, 'error');
-        $this->assertEquals($response->getData()->message, 'Email address does not exist');
+        $this->assertEquals('error', $response->getData()->status);
+        $this->assertEquals('Email address does not exist', $response->getData()->message);
     }
 
     /** @test */
@@ -29,9 +29,9 @@ class ResetPasswordTest extends TestCase
         Mail::fake();
 
         $user = $this->createUser();
-        $response = $this->postJson($this->baseUrl . '/accounts/password/forgot', ['email_address' => $user->email_address]);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/password/forgot', ['email_address' => $user->email_address]);
         $response->assertOk();
-        $this->assertEquals($response->getData()->status, 'success');
+        $this->assertEquals('success', $response->getData()->status);
         $this->assertEquals($response->getData()->message, 'Reset password link successfully sent to ' . $user->email_address);
 
         Mail::assertQueued(ForgotPasswordMail::class);
@@ -42,10 +42,10 @@ class ResetPasswordTest extends TestCase
     {
         $data = ['token' => ''];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/password/reset', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->token[0], 'The token field is required.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The token field is required.', $response->getData()->errors->token[0]);
     }
 
     /** @test */
@@ -56,10 +56,10 @@ class ResetPasswordTest extends TestCase
             'new_password_confirmation' => '12345',
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/password/reset', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->new_password[0], 'The new password must be at least 6 characters.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The new password must be at least 6 characters.', $response->getData()->errors->new_password[0]);
     }
 
     /** @test */
@@ -70,10 +70,10 @@ class ResetPasswordTest extends TestCase
             'new_password_confirmation' => '12345678',
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/password/reset', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->new_password[0], 'The new password confirmation does not match.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The new password confirmation does not match.', $response->getData()->errors->new_password[0]);
     }
 
     /** @test */
@@ -81,10 +81,10 @@ class ResetPasswordTest extends TestCase
     {
         $data = ['token' => Str::random(60)];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/password/reset', $data);
         $response->assertUnprocessable();
-        $this->assertEquals($response->getData()->message, 'The given data was invalid.');
-        $this->assertEquals($response->getData()->errors->token[0], 'The selected token is invalid.');
+        $this->assertEquals('The given data was invalid.', $response->getData()->message);
+        $this->assertEquals('The selected token is invalid.', $response->getData()->errors->token[0]);
     }
 
     /** @test */
@@ -101,10 +101,10 @@ class ResetPasswordTest extends TestCase
             'new_password_confirmation' => '1234567',
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/password/reset', $data);
         $response->assertForbidden();
-        $this->assertEquals($response->getData()->status, 'error');
-        $this->assertEquals($response->getData()->message, 'Invalid token');
+        $this->assertEquals('error', $response->getData()->status);
+        $this->assertEquals('Invalid token', $response->getData()->message);
     }
 
     /** @test */
@@ -118,10 +118,10 @@ class ResetPasswordTest extends TestCase
             'new_password_confirmation' => '1234567',
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/password/reset', $data);
         $response->assertForbidden();
-        $this->assertEquals($response->getData()->status, 'error');
-        $this->assertEquals($response->getData()->message, 'Token has expired. Kindly reset password again.');
+        $this->assertEquals('error', $response->getData()->status);
+        $this->assertEquals('Token has expired. Kindly reset password again.', $response->getData()->message);
     }
 
     /** @test */
@@ -140,9 +140,9 @@ class ResetPasswordTest extends TestCase
             'new_password_confirmation' => '1234567',
         ];
 
-        $response = $this->postJson($this->baseUrl . '/accounts/password/reset', $data);
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/password/reset', $data);
         $response->assertOk();
-        $this->assertEquals($response->getData()->status, 'success');
-        $this->assertEquals($response->getData()->message, 'Password successfully reset');
+        $this->assertEquals('success', $response->getData()->status);
+        $this->assertEquals('Password successfully reset', $response->getData()->message);
     }
 }
