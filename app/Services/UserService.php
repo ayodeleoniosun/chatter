@@ -46,14 +46,18 @@ class UserService
         if (!$user) {
             abort(404, 'User not found');
         }
+
         return new UserResource($user);
     }
 
     public function updateProfilePicture(object $image, int $id): UserResource
     {
         $filename = time() . ' . ' . $image->extension();
+
         Storage::disk('s3')->put($filename, file_get_contents($image->getRealPath()));
+
         $user = $this->userRepository->updateProfilePicture($filename, $id);
+
         return new UserResource($user);
     }
 

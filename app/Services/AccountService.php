@@ -83,21 +83,25 @@ class AccountService
 
         if (!$token) {
             abort(403, 'Invalid token');
-        } else {
-            $tokenExpiryMinutes = Carbon::parse($token->expires_at)->diffInMinutes(Carbon::now());
-            $configExpiryMinutes = config('auth.passwords.users.expire');
-
-            if ($tokenExpiryMinutes > $configExpiryMinutes) {
-                abort(403, 'Token has expired. Kindly reset password again.');
-            } else {
-                $user = $this->accountRepository->getUserByEmailAddress($token->email);
-
-                DB::transaction(function () use ($data, $user, $token) {
-                    $this->accountRepository->updatePassword($data, $user->id);
-                    $this->passwordResetRepository->invalidateToken($token);
-                });
-            }
         }
+
+        $user = $this->accountRepository->getUserByEmailAddress($token->email);
+
+        if (!$user) {
+            abort(404, 'User not found.');
+        }
+
+        $tokenExpiryMinutes = Carbon::parse($token->expires_at)->diffInMinutes(Carbon::now());
+        $configExpiryMinutes = config('auth.passwords.users.expire');
+
+        if ($tokenExpiryMinutes > $configExpiryMinutes) {
+            abort(403, 'Token has expired. Kindly reset password again.');
+        }
+
+        DB::transaction(function () use ($data, $user, $token) {
+            $this->accountRepository->updatePassword($data, $user->id);
+            $this->passwordResetRepository->invalidateToken($token);
+        });
     }
 
     public function acceptInvitation(array $data): void
@@ -106,11 +110,11 @@ class AccountService
 
         if (!$token || $token->invitee != $data['email_address']) {
             abort(403, 'Invalid token');
-        } else {
-            DB::transaction(function () use ($data, $token,) {
-                $this->invitationRepository->invalidateToken($token);
-                $this->register($data);
-            });
         }
+
+        DB::transaction(function () use ($data, $token,) {
+            $this->invitationRepository->invalidateToken($token);
+            $this->register($data);
+        });
     }
 }
