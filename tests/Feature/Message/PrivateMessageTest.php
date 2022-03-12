@@ -117,21 +117,23 @@ class PrivateMessageTest extends TestCase
         $this->assertEquals('You cannot view this conversation messages.', $response->getData()->message);
     }
 
-//    /** @test */
+    /** @test */
     public function cannot_view_unauthorized_conversation_messages()
     {
-//        $firstConversation = $this->sendMessage();
-//        $secondConversation = $this->sendMessage();
-//
-//        $conversations = $this->getJson($this->apiBaseUrl . '/messages/conversations');
-//        dd($conversations->getData());
-//        $conversationId = $conversations->getData()->data[0]->id;
-//
-//
-//        $response = $this->getJson($this->apiBaseUrl . "/messages/conversations/{$conversationId}");
-//
-//        $this->assertEquals('error', $response->getData()->status);
-//        $this->assertEquals('You cannot view this conversation messages.', $response->getData()->message);
+        $this->authUser();
+        $secondUser = $this->createUser();
+        $this->sendMessage($secondUser); //send message between first and second user
+
+        $this->authUser($secondUser);
+        $thirdUser = $this->createUser();
+        $this->sendMessage($thirdUser); //send message between second and third user
+
+        $this->authUser($thirdUser);
+
+        $response = $this->getJson($this->apiBaseUrl . "/messages/conversations/1");
+
+        $this->assertEquals('error', $response->getData()->status);
+        $this->assertEquals('You cannot view this conversation messages.', $response->getData()->message);
     }
 
     /** @test */
@@ -173,26 +175,25 @@ class PrivateMessageTest extends TestCase
     /** @test */
     public function cannot_delete_unauthorized_message()
     {
-//        $firstUser = $this->createUser();
-//        $secondUser = $this->authUser();
-//        $this->sendMessage($firstUser); //send message between first and second user
-//
-//        $thirdUser = $this->createUser();
-//        $this->sendMessage($thirdUser); //send message between second and third user
-//
-//        $conversations = $this->getJson($this->apiBaseUrl . '/messages/conversations');
-//        dd($conversations->getData());
-//        $firstConversationId = $conversations->getData()->data[0]->id;
-//        $secondConversationId = $conversations->getData()->data[1]->id;
-//
-//        $messages = $this->getJson($this->apiBaseUrl . "/messages/conversations/{$secondConversationId}");
-//        $messageId = $messages->getData()->data[0]->id;
-//
-//        $response = $this->postJson($this->apiBaseUrl . "/messages/delete/{$messageId}");
-//        $response->assertNotFound();
-//
-//        $this->assertEquals('error', $response->getData()->status);
-//        $this->assertEquals('Message not found.', $response->getData()->message);
+        $this->authUser();
+        $secondUser = $this->createUser();
+        $this->sendMessage($secondUser); //send message between first and second user
+
+        $this->authUser($secondUser);
+        $thirdUser = $this->createUser();
+        $this->sendMessage($thirdUser); //send message between second and third user
+
+        $conversations = $this->getJson($this->apiBaseUrl . '/messages/conversations');
+        $firstConversationId = $conversations->getData()->data[0]->id;
+
+        $messages = $this->getJson($this->apiBaseUrl . "/messages/conversations/{$firstConversationId}");
+        $messageId = $messages->getData()->data[0]->id;
+
+        $response = $this->postJson($this->apiBaseUrl . "/messages/delete/{$messageId}");
+        $response->assertForbidden();
+
+        $this->assertEquals('error', $response->getData()->status);
+        $this->assertEquals('You cannot delete this message.', $response->getData()->message);
     }
 
     /** @test */
