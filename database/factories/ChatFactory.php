@@ -19,7 +19,6 @@ class ChatFactory extends Factory
             'sender_id'    => 1,
             'recipient_id' => 2,
             'content'      => $this->faker->word,
-            'content_type' => ChatType::TEXT
         ];
     }
 }

@@ -90,10 +90,7 @@ class ResetPasswordTest extends TestCase
     /** @test */
     public function cannot_reset_password_with_used_token()
     {
-        $passwordReset = $this->createPasswordReset();
-
-        $passwordReset->used = true;
-        $passwordReset->save();
+        $passwordReset = $this->createPasswordReset('used');
 
         $data = [
             'token'                     => $passwordReset->token,
@@ -108,9 +105,30 @@ class ResetPasswordTest extends TestCase
     }
 
     /** @test */
-    public function cannot_reset_password_with_expired_token()
+    public function cannot_reset_password_with_non_existent_email()
     {
         $passwordReset = $this->createPasswordReset();
+
+        $data = [
+            'token'                     => $passwordReset->token,
+            'new_password'              => '1234567',
+            'new_password_confirmation' => '1234567',
+        ];
+
+        $response = $this->postJson($this->apiBaseUrl . '/accounts/password/reset', $data);
+        $response->assertNotFound();
+        $this->assertEquals('error', $response->getData()->status);
+        $this->assertEquals('User not found.', $response->getData()->message);
+    }
+
+    /** @test */
+    public function cannot_reset_password_with_expired_token()
+    {
+        $user = $this->createUser();
+        $passwordReset = $this->createPasswordReset();
+
+        $passwordReset->email = $user->email_address;
+        $passwordReset->save();
 
         $data = [
             'token'                     => $passwordReset->token,
