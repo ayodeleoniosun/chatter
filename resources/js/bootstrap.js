@@ -2,7 +2,8 @@ window._ = require('lodash');
 
 try {
     require('bootstrap');
-} catch (e) {}
+} catch (e) {
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -28,5 +29,9 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    forceTLS: true
+    forceTLS: false,
+    wsHost: "127.0.0.1",
+    wsPort: 6001,
+    disableStats: true,
+
 });
