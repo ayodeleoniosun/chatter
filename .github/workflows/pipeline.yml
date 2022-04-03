@@ -18,8 +18,8 @@ jobs:
         with:
           args: --configuration=.phplint.yml
 
-  phpstan:
-    name: Run static analysis
+  phpfixer:
+    name: Run php fixer
     runs-on: ubuntu-latest
 
     steps:
@@ -50,8 +50,16 @@ jobs:
           mkdir -p database
           touch database/database.sqlite
 
-      - name: Run Tests
+      - name: Run tests
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
         run: vendor/bin/pest --parallel
+
+  phpstan:
+    name: Run static analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run static analysis
+      run: vendor/bin/phpstan analyze --memory-limit=1G
