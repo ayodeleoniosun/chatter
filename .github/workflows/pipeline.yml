@@ -1,4 +1,4 @@
-name: Laravel
+name: Chatter
 
 on:
   push:
@@ -7,11 +7,11 @@ on:
     branches: [ main ]
 
 jobs:
-  
+
   phplint:
     name: Check syntax errors
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: overtrue/phplint@8.0
         with:
@@ -21,7 +21,7 @@ jobs:
   phpstan:
     name: Run static analysis
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
       - name: Run PHP CS Fixer
@@ -29,30 +29,30 @@ jobs:
         with:
           args: --config=.php_cs.dist.php --allow-risky=yes
 
-  testsuites:
+  tests:
     name: Run tests
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Setup PHP
-      uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      with:
-        php-version: '8.1'
-    
-    - uses: actions/checkout@v3
-    
-    - name: Build
-      run: |
-        php -r "file_exists('.env') || copy('.env.example', '.env');"
-        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        php artisan key:generate
-        chmod -R 777 storage bootstrap/cache
-        php artisan storage:link
-        mkdir -p database
-        touch database/database.sqlite
-    
-    - name: Run Tests
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: vendor/bin/pest --parallel
+      - name: Setup PHP
+        uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.1'
+
+      - uses: actions/checkout@v3
+
+      - name: Build
+        run: |
+          php -r "file_exists('.env') || copy('.env.example', '.env');"
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          php artisan key:generate
+          chmod -R 777 storage bootstrap/cache
+          php artisan storage:link
+          mkdir -p database
+          touch database/database.sqlite
+
+      - name: Run Tests
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: vendor/bin/pest --parallel
