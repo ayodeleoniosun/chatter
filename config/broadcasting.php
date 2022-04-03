@@ -37,10 +37,10 @@ return [
             'app_id'  => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'host'    => 'wschatter.ayodeleoniosun.com',
-                'port'    => '443',
+//                'host'    => 'wschatter.ayodeleoniosun.com',
+//                'port'    => '443',
                 'useTLS'  => true,
-                'scheme'  => 'https'
+                //'scheme'  => 'https'
             ],
         ],
 

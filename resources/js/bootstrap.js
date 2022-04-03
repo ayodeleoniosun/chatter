@@ -30,8 +30,8 @@ window.Echo = new Echo({
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     forceTLS: true,
-    wsHost: "wschatter.ayodeleoniosun.com",
-    wsPort: 443,
-    disableStats: true,
+    // wsHost: "wschatter.ayodeleoniosun.com",
+    // wsPort: 443,
+    // disableStats: true,
 
 });
