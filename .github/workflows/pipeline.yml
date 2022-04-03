@@ -56,10 +56,5 @@ jobs:
           DB_DATABASE: database/database.sqlite
         run: vendor/bin/pest --parallel
 
-  phpstan:
-    name: Run static analysis
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Run static analysis
-      run: vendor/bin/phpstan analyze --memory-limit=1G
+        run: vendor/bin/phpstan analyze --memory-limit=1G
