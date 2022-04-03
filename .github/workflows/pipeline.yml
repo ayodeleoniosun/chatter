@@ -9,31 +9,38 @@ on:
 jobs:
   
   phplint:
-    name: Check syntax
+    name: Check syntax errors
     runs-on: ubuntu-latest
+    
     steps:
-        - uses: actions/checkout@v3
-        - uses: michaelw90/PHP-Lint@master
+      - uses: overtrue/phplint@8.0
+        with:
+          path: .
+          options: --exclude=*.log
 
   phpstan:
     name: Run static analysis
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v3
-      - name: PHPStan
-        uses: docker://oskarstark/phpstan-ga
+      - name: Run PHP CS Fixer
+        uses: docker://oskarstark/php-cs-fixer-ga
         with:
-          args: analyse src/
+          args: --config=.php_cs.dist.php --allow-risky=yes
 
   testsuites:
     name: Run tests
     runs-on: ubuntu-latest
+    
     steps:
     - name: Setup PHP
       uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
         php-version: '8.1'
+    
     - uses: actions/checkout@v3
+    
     - name: Build
       run: |
         php -r "file_exists('.env') || copy('.env.example', '.env');"
@@ -43,6 +50,7 @@ jobs:
         php artisan storage:link
         mkdir -p database
         touch database/database.sqlite
+    
     - name: Run Tests
       env:
         DB_CONNECTION: sqlite
