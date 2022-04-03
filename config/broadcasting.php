@@ -40,7 +40,7 @@ return [
 //                'host'    => 'wschatter.ayodeleoniosun.com',
 //                'port'    => '443',
                 'useTLS'  => true,
-                //'scheme'  => 'https'
+//                'scheme'  => 'https'
             ],
         ],
 
