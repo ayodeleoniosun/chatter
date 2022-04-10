@@ -21,6 +21,7 @@ class MessageResource extends JsonResource
             'sender_id'       => $this->sender_id,
             'sender'          => $this->sender->fullname,
             'is_read'         => $this->is_read,
+            'attachment'      => $this->attachment?->path,
             'read_at'         => $this->is_read ? $this->parseDate($this->read_at) : null,
             'created_at'      => $this->parseDate($this->created_at),
         ];
