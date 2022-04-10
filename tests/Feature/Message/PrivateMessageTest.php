@@ -5,8 +5,10 @@ namespace Tests\Feature\Message;
 use App\Events\Chats\MessageSent;
 use App\Jobs\SaveMessage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 use Tests\Traits\CreateUsers;
@@ -74,6 +76,22 @@ class PrivateMessageTest extends TestCase
         Event::fake();
 
         $response = $this->sendMessage();
+
+        $response->assertCreated();
+        $this->assertEquals('success', $response->getData()->status);
+        $this->assertEquals('Message sent', $response->getData()->message);
+
+        Bus::assertDispatched(SaveMessage::class);
+        Event::assertDispatched(MessageSent::class);
+    }
+
+    /** @test */
+    public function can_send_message_with_attachment()
+    {
+        Bus::fake();
+        Event::fake();
+
+        $response = $this->sendMessage(null, true);
 
         $response->assertCreated();
         $this->assertEquals('success', $response->getData()->status);
@@ -213,7 +231,7 @@ class PrivateMessageTest extends TestCase
         $this->assertEquals('Message deleted', $response->getData()->message);
     }
 
-    private function sendMessage($recipient = null): TestResponse
+    private function sendMessage($recipient = null, $attachment = false): TestResponse
     {
         if (is_null($recipient)) {
             $this->authUser();
@@ -222,9 +240,17 @@ class PrivateMessageTest extends TestCase
             $recipientUser = $recipient;
         }
 
+        $file = null;
+
+        if ($attachment) {
+            Storage::fake('s3');
+            $file = UploadedFile::fake()->image('attachment.png');
+        }
+
         $data = [
             'message'      => 'hello world',
             'recipient_id' => $recipientUser->id,
+            'attachment'   => $file
         ];
 
         return $this->postJson($this->apiBaseUrl . '/messages/send', $data);
