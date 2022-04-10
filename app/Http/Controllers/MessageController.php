@@ -60,6 +60,7 @@ class MessageController extends Controller
                 'message' => 'Message sent',
             ], 201);
         } catch (\Exception $e) {
+            dd($e);
             return response()->json([
                 'status'  => 'error',
                 'message' => $e->getMessage(),
