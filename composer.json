@@ -20,6 +20,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "league/flysystem-aws-s3-v3": "^1.0",
+        "livewire/livewire": "^2.10",
         "pusher/pusher-php-server": "^7.0"
     },
     "require-dev": {
