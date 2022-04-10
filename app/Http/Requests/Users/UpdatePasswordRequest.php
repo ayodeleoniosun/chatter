@@ -26,7 +26,7 @@ class UpdatePasswordRequest extends FormRequest
         return [
             'current_password'          => 'required|string|password:sanctum',
             'new_password'              => 'required|string|min:6|confirmed',
-            'new_password_confirmation' => 'required|string'
+            'new_password_confirmation' => 'required|string',
         ];
     }
 
@@ -38,7 +38,7 @@ class UpdatePasswordRequest extends FormRequest
     public function messages()
     {
         return [
-            'current_password.password' => 'Current password is incorrect'
+            'current_password.password' => 'Current password is incorrect',
         ];
     }
 }

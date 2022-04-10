@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Chats\SendMessageRequest;
-use App\Models\Message;
 use App\Services\MessageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,13 +22,13 @@ class MessageController extends Controller
             $conversations = $this->messageService->conversations($request->user()->id);
 
             return response()->json([
-                "status" => "success",
-                "data"   => $conversations
+                'status' => 'success',
+                'data'   => $conversations,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -40,13 +39,13 @@ class MessageController extends Controller
             $messages = $this->messageService->messages($request->user()->id, $conversation);
 
             return response()->json([
-                "status" => "success",
-                "data"   => $messages
+                'status' => 'success',
+                'data'   => $messages,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -57,13 +56,13 @@ class MessageController extends Controller
             $this->messageService->send($request->user(), $request->all());
 
             return response()->json([
-                "status"  => "success",
-                "message" => "Message sent"
+                'status'  => 'success',
+                'message' => 'Message sent',
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -74,13 +73,13 @@ class MessageController extends Controller
             $this->messageService->delete($request->user()->id, $message);
 
             return response()->json([
-                "status"  => "success",
-                "message" => "Message deleted"
+                'status'  => 'success',
+                'message' => 'Message deleted',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }

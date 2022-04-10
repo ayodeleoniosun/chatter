@@ -34,7 +34,7 @@ class InvitationMail extends Mailable
             ->markdown('emails.invitation')
             ->with([
                 'invited_by' => ucfirst($this->data->user->first_name),
-                'url'        => $this->data->invitation_link
+                'url'        => $this->data->invitation_link,
             ]);
     }
 }

@@ -11,8 +11,7 @@ class MessageRepository
 
     public function __construct(
         Message $message,
-    )
-    {
+    ) {
         $this->message = $message;
     }
 
@@ -23,7 +22,7 @@ class MessageRepository
 
         if ($attachment) {
             $file = app(FileRepository::class)->create([
-                'path' => $data['attachment']
+                'path' => $data['attachment'],
             ]);
         }
 
@@ -33,7 +32,7 @@ class MessageRepository
             'conversation_id' => $conversation->id,
             'sender_id'       => $data['sender_id'],
             'message'         => $data['message'],
-            'attachment_id'   => $file?->id
+            'attachment_id'   => $file?->id,
         ]);
     }
 
@@ -59,7 +58,7 @@ class MessageRepository
         return Message::where([
             ['conversation_id', $conversationId],
             ['sender_id', '<>', $authUserId],
-            ['is_read', false]
+            ['is_read', false],
         ])->get();
     }
 

@@ -15,6 +15,7 @@ trait CreateUsers
     protected function authUser($user = null)
     {
         $user = is_null($user) ? $this->createUser() : $user;
+
         return Sanctum::actingAs($user);
     }
 }

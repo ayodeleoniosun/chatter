@@ -29,7 +29,7 @@ class MessageResource extends JsonResource
     private function parseDate($date): string
     {
         $parsedDate = Carbon::parse($date);
-        $time = $parsedDate->format("h:i A");
+        $time = $parsedDate->format('h:i A');
 
         if ($parsedDate->isToday()) {
             return $time;
@@ -37,6 +37,6 @@ class MessageResource extends JsonResource
             return "Yesterday, {$time}";
         }
 
-        return $parsedDate->format("d/m/Y") . ", {$time}";
+        return $parsedDate->format('d/m/Y') . ", {$time}";
     }
 }

@@ -22,7 +22,7 @@ class PasswordResetRepository
     {
         return $this->token->where([
             'token' => $token,
-            'used'  => false
+            'used'  => false,
         ])->first();
     }
 

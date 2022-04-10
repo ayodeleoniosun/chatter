@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
@@ -24,15 +25,16 @@ class AccountController extends Controller
     {
         try {
             $user = $this->accountService->register($request->all());
+
             return response()->json([
-                "status"  => "success",
-                "message" => "Registration successful",
-                "data"    => $user
+                'status'  => 'success',
+                'message' => 'Registration successful',
+                'data'    => $user,
             ], 201);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -41,15 +43,16 @@ class AccountController extends Controller
     {
         try {
             $data = $this->accountService->login($request->all());
+
             return response()->json([
-                "status"  => "success",
-                "message" => "Login successful",
-                "data"    => $data
+                'status'  => 'success',
+                'message' => 'Login successful',
+                'data'    => $data,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -60,13 +63,13 @@ class AccountController extends Controller
             $this->accountService->forgotPassword($request->all());
 
             return response()->json([
-                "status"  => "success",
-                "message" => "Reset password link successfully sent to " . $request->email_address
+                'status'  => 'success',
+                'message' => 'Reset password link successfully sent to ' . $request->email_address,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -77,13 +80,13 @@ class AccountController extends Controller
             $this->accountService->resetPassword($request->all());
 
             return response()->json([
-                "status"  => "success",
-                "message" => "Password successfully reset"
+                'status'  => 'success',
+                'message' => 'Password successfully reset',
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -94,13 +97,13 @@ class AccountController extends Controller
             $this->accountService->acceptInvitation($request->all());
 
             return response()->json([
-                "status"  => "success",
-                "message" => "Invitation accepted successfully"
+                'status'  => 'success',
+                'message' => 'Invitation accepted successfully',
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }

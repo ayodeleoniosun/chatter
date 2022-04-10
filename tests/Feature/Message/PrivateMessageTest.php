@@ -25,7 +25,7 @@ class PrivateMessageTest extends TestCase
     {
         $data = [
             'message'      => 'hello world',
-            'recipient_id' => 4
+            'recipient_id' => 4,
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/messages/send', $data);
@@ -57,7 +57,7 @@ class PrivateMessageTest extends TestCase
 
         $data = [
             'message'      => 'hello world',
-            'recipient_id' => $user->id
+            'recipient_id' => $user->id,
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/messages/send', $data);
@@ -97,9 +97,9 @@ class PrivateMessageTest extends TestCase
                         'id', 'sender_id', 'recipient_id', 'sender', 'recipient', 'show_name',
                         'last_message' => [],
                         'count_unread_messages',
-                        'created_at', 'updated_at'
-                    ]
-                ]
+                        'created_at', 'updated_at',
+                    ],
+                ],
             ]);
 
         $this->assertEquals('success', $response->getData()->status);
@@ -130,7 +130,7 @@ class PrivateMessageTest extends TestCase
 
         $this->authUser($thirdUser);
 
-        $response = $this->getJson($this->apiBaseUrl . "/messages/conversations/1");
+        $response = $this->getJson($this->apiBaseUrl . '/messages/conversations/1');
 
         $this->assertEquals('error', $response->getData()->status);
         $this->assertEquals('You cannot view this conversation messages.', $response->getData()->message);
@@ -151,9 +151,9 @@ class PrivateMessageTest extends TestCase
                 'status',
                 'data' => [
                     '*' => [
-                        'id', 'conversation_id', 'sender_id', 'sender', 'is_read', 'read_at', 'created_at'
-                    ]
-                ]
+                        'id', 'conversation_id', 'sender_id', 'sender', 'is_read', 'read_at', 'created_at',
+                    ],
+                ],
             ]);
 
         $this->assertEquals('success', $response->getData()->status);
@@ -224,7 +224,7 @@ class PrivateMessageTest extends TestCase
 
         $data = [
             'message'      => 'hello world',
-            'recipient_id' => $recipientUser->id
+            'recipient_id' => $recipientUser->id,
         ];
 
         return $this->postJson($this->apiBaseUrl . '/messages/send', $data);

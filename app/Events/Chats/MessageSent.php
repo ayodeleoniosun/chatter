@@ -2,14 +2,12 @@
 
 namespace App\Events\Chats;
 
-use Illuminate\Broadcasting\Channel;
+use Carbon;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Carbon;
 
 class MessageSent implements ShouldBroadcast
 {
@@ -35,6 +33,7 @@ class MessageSent implements ShouldBroadcast
     public function broadcastOn()
     {
         $this->data['time'] = Carbon\Carbon::now()->toDateTimeString();
+
         return new PrivateChannel("chat.sent.{$this->data['recipient_id']}");
     }
 

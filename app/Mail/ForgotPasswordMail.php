@@ -34,7 +34,7 @@ class ForgotPasswordMail extends Mailable
             ->markdown('emails.forgot-password')
             ->with([
                 'first_name' => ucfirst($this->data->user->first_name),
-                'url'        => $this->data->link
+                'url'        => $this->data->link,
             ]);
     }
 }

@@ -25,10 +25,10 @@ class AuthenticationTest extends TestCase
                 'message',
                 'data' => [
                     'user' => ['id', 'first_name', 'last_name', 'email_address', 'phone_number', 'profile_picture',
-                        'previous_profile_pictures', 'created_at', 'updated_at'
+                        'previous_profile_pictures', 'created_at', 'updated_at',
                     ],
-                    'token'
-                ]
+                    'token',
+                ],
             ]);
 
         $this->assertEquals('success', $response->getData()->status);
@@ -40,7 +40,7 @@ class AuthenticationTest extends TestCase
     {
         $data = [
             'email_address' => 'email@chatter.app',
-            'password'      => '123456789'
+            'password'      => '123456789',
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/login', $data);

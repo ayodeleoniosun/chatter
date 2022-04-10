@@ -26,14 +26,14 @@ class SendMessageRequest extends FormRequest
         return [
             'message'      => 'required_without:attachment|string',
             'recipient_id' => 'required|exists:users,id',
-            'attachment'   => 'sometimes|mimes:jpg,png,pdf,xls,xlsx,ppt,doc,docx,mp3,flv,avi,mp4'
+            'attachment'   => 'sometimes|mimes:jpg,png,pdf,xls,xlsx,ppt,doc,docx,mp3,flv,avi,mp4',
         ];
     }
 
     public function messages()
     {
         return [
-            'attachment.mimes' => 'Invalid file'
+            'attachment.mimes' => 'Invalid file',
         ];
     }
 }

@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Invitation extends Model
 {
     use SoftDeletes;
-
     use HasFactory;
 
     protected $table = 'invitations';

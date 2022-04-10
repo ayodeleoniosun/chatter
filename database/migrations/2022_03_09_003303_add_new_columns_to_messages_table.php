@@ -20,7 +20,6 @@ class AddNewColumnsToMessagesTable extends Migration
             $table->dateTime('read_at')->nullable()->after('is_read');
 
             $table->foreign('attachment_id')->references('id')->on('files');
-
         });
     }
 

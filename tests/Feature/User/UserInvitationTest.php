@@ -6,7 +6,8 @@ use App\Mail\InvitationMail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
-use Tests\Traits\{CreateInvitations, CreateUsers};
+use Tests\Traits\CreateInvitations;
+use Tests\Traits\CreateUsers;
 
 class UserInvitationTest extends TestCase
 {
@@ -50,7 +51,7 @@ class UserInvitationTest extends TestCase
             'last_name'     => 'lastname',
             'email_address' => 'email@chatter.app',
             'phone_number'  => '08123456789',
-            'password'      => '12345678'
+            'password'      => '12345678',
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/invitation/accept', $data);
@@ -59,7 +60,6 @@ class UserInvitationTest extends TestCase
         $this->assertEquals('The given data was invalid.', $response->getData()->message);
         $this->assertEquals('The token field is required.', $response->getData()->errors->token[0]);
     }
-
 
     /** @test */
     public function cannot_accept_invitation_with_an_invalid_token()
@@ -113,7 +113,7 @@ class UserInvitationTest extends TestCase
             'last_name'     => 'lastname',
             'email_address' => $invitation->invitee,
             'phone_number'  => '0812345678',
-            'password'      => bcrypt('123456789')
+            'password'      => bcrypt('123456789'),
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/invitation/accept', $data);

@@ -29,7 +29,7 @@ class AcceptInvitationRequest extends FormRequest
             'last_name'     => 'required|string',
             'email_address' => 'required|email|unique:users',
             'password'      => 'required|string|min:6',
-            'phone_number'  => 'required|string|min:10|max:15|unique:users'
+            'phone_number'  => 'required|string|min:10|max:15|unique:users',
         ];
     }
 }

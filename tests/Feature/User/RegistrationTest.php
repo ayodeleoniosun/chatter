@@ -18,7 +18,7 @@ class RegistrationTest extends TestCase
             'last_name'     => 'lastname',
             'email_address' => 'email@chatter.app',
             'phone_number'  => '08123456789',
-            'password'      => '12345'
+            'password'      => '12345',
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $data);
@@ -34,7 +34,7 @@ class RegistrationTest extends TestCase
         $data = [
             'first_name'   => 'firstname',
             'phone_number' => '08123456789',
-            'password'     => '1234567'
+            'password'     => '1234567',
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $data);
@@ -66,7 +66,7 @@ class RegistrationTest extends TestCase
             'last_name'     => 'lastname',
             'email_address' => 'email@chatter.app',
             'phone_number'  => '08123456789',
-            'password'      => bcrypt('123456789')
+            'password'      => bcrypt('123456789'),
         ];
 
         $response = $this->postJson($this->apiBaseUrl . '/accounts/register', $data);

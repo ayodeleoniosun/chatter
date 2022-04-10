@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Invitation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -18,7 +17,7 @@ class InvitationFactory extends Factory
         return [
             'invited_by' => 1,
             'invitee'    => $this->faker->email,
-            'token'      => bcrypt(Str::random(10))
+            'token'      => bcrypt(Str::random(10)),
         ];
     }
 }

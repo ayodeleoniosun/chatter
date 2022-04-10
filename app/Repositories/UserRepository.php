@@ -64,7 +64,7 @@ class UserRepository
         $data = [
             'invited_by' => $id,
             'invitee'    => $email,
-            'token'      => Str::random(60)
+            'token'      => Str::random(60),
         ];
 
         return app(InvitationRepository::class)->create($data);

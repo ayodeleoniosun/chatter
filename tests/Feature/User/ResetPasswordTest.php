@@ -8,7 +8,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tests\TestCase;
-use Tests\Traits\{CreatePasswordResets, CreateUsers};
+use Tests\Traits\CreatePasswordResets;
+use Tests\Traits\CreateUsers;
 
 class ResetPasswordTest extends TestCase
 {

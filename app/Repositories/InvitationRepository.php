@@ -22,7 +22,7 @@ class InvitationRepository
     {
         return $this->invitation->where([
             'token' => $token,
-            'used'  => false
+            'used'  => false,
         ])->first();
     }
 
@@ -31,5 +31,4 @@ class InvitationRepository
         $invitation->used = true;
         $invitation->save();
     }
-
 }

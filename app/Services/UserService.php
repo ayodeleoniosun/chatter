@@ -1,14 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Services;
 
 use App\Http\Resources\UserResource;
 use App\Jobs\SendInvitationMail;
-use App\Models\User;
 use App\Models\Invitation;
-use App\Repositories\UserRepository;
+use App\Models\User;
 use App\Repositories\InvitationRepository;
+use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,7 +26,8 @@ class UserService
     public function index()
     {
         $users = $this->userRepository->getUsers();
-        return $users->map(fn(User $user) => new UserResource($user));
+
+        return $users->map(fn (User $user) => new UserResource($user));
     }
 
     public function updateProfile(array $data, int $id): UserResource
@@ -43,7 +45,7 @@ class UserService
     {
         $user = $this->userRepository->getUser($id);
 
-        if (!$user) {
+        if (! $user) {
             abort(404, 'User not found');
         }
 
@@ -59,7 +61,7 @@ class UserService
 
         $data = [
             'extension' => $extension,
-            'path'      => Storage::disk('profile_pictures')->url($filename)
+            'path'      => Storage::disk('profile_pictures')->url($filename),
         ];
 
         return new UserResource($this->userRepository->updateProfilePicture($data, $userId));
@@ -81,7 +83,7 @@ class UserService
             'user'            => $user,
             'token'           => $token,
             'invitation_link' => $invitationLink,
-            'expiration'      => $expiration
+            'expiration'      => $expiration,
         ]);
 
         SendInvitationMail::dispatch($data);
@@ -90,7 +92,7 @@ class UserService
             'invited_by' => $user->id,
             'invitee'    => $invitee,
             'token'      => $token,
-            'expires_at' => $expiration
+            'expires_at' => $expiration,
         ]);
     }
 

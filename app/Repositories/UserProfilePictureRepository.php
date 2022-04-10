@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Enums\FileType;
-use App\Models\{User, UserProfilePicture};
+use App\Models\User;
+use App\Models\UserProfilePicture;
 
 class UserProfilePictureRepository
 {
@@ -17,12 +17,12 @@ class UserProfilePictureRepository
     public function save(array $data, int $userId): User
     {
         $file = app(FileRepository::class)->create([
-            'path' => $data['path']
+            'path' => $data['path'],
         ]);
 
         $picture = $this->picture->create([
             'user_id' => $userId,
-            'file_id' => $file->id
+            'file_id' => $file->id,
         ]);
 
         $user = app(UserRepository::class)->getUser($userId);

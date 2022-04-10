@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\ChatType;
-use App\Models\Chat;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ChatFactory extends Factory

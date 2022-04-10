@@ -17,19 +17,18 @@ class PasswordResetFactory extends Factory
         return [
             'email'      => $this->faker->email,
             'token'      => bcrypt(Str::random(10)),
-            'expires_at' => $this->faker->dateTime()
+            'expires_at' => $this->faker->dateTime(),
         ];
     }
 
     /**
      * Indicate that a token has been used
      */
-
     public function used(): Factory
     {
         return $this->state(function () {
             return [
-                'used' => true
+                'used' => true,
             ];
         });
     }

@@ -21,15 +21,15 @@ class ConversationRepository
 
         $conversation = Conversation::where([
             ['sender_id', $senderId],
-            ['recipient_id', $recipientId]
+            ['recipient_id', $recipientId],
         ])->orWhere(function ($query) use ($senderId, $recipientId) {
             $query->where([
                 ['sender_id', $recipientId],
-                ['recipient_id', $senderId]
+                ['recipient_id', $senderId],
             ]);
         })->first();
 
-        if (!$conversation) {
+        if (! $conversation) {
             $conversation = $this->conversation->create([
                 'sender_id'    => $senderId,
                 'recipient_id' => $recipientId,
@@ -48,7 +48,7 @@ class ConversationRepository
     {
         $conversation = Conversation::find($conversationId);
 
-        if (!$conversation) {
+        if (! $conversation) {
             return false;
         }
 

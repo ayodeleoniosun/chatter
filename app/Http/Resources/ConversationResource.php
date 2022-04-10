@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Message;
 use App\Repositories\MessageRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 

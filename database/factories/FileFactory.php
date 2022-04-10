@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Enums\FileType;
-use App\Models\File;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FileFactory extends Factory
@@ -18,7 +17,7 @@ class FileFactory extends Factory
         return [
             'filename'  => $this->faker->file,
             'type'      => FileType::PROFILE_PICTURE,
-            'object_id' => 1
+            'object_id' => 1,
         ];
     }
 }

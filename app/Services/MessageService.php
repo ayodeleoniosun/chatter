@@ -6,7 +6,6 @@ use App\Events\Chats\MessageSent;
 use App\Http\Resources\ConversationResource;
 use App\Http\Resources\MessageResource;
 use App\Jobs\SaveMessage;
-use App\Models\Message;
 use App\Models\User;
 use App\Repositories\ConversationRepository;
 use App\Repositories\MessageRepository;
@@ -20,10 +19,9 @@ class MessageService
     protected ConversationRepository $conversationRepository;
 
     public function __construct(
-        MessageRepository      $messageRepository,
+        MessageRepository $messageRepository,
         ConversationRepository $conversationRepository
-    )
-    {
+    ) {
         $this->messageRepository = $messageRepository;
         $this->conversationRepository = $conversationRepository;
     }
@@ -57,7 +55,7 @@ class MessageService
     {
         $canViewConversation = app(ConversationRepository::class)->canViewConversation($user, $conversation);
 
-        if (!$canViewConversation) {
+        if (! $canViewConversation) {
             abort(403, 'You cannot view this conversation messages.');
         }
 
@@ -68,7 +66,7 @@ class MessageService
     {
         $message = $this->messageRepository->find($messageId);
 
-        if (!$message) {
+        if (! $message) {
             abort(404, 'Message not found.');
         }
 

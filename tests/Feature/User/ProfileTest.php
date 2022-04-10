@@ -28,7 +28,7 @@ class ProfileTest extends TestCase
         $response = $this->getJson($this->apiBaseUrl . '/users/profile');
 
         $response->assertOk()
-            ->assertJson(fn(AssertableJson $json) => $json->hasAll('status', 'data'));
+            ->assertJson(fn (AssertableJson $json) => $json->hasAll('status', 'data'));
 
         $this->assertEquals('success', $response->getData()->status);
         $this->assertEquals($response->getData()->data->first_name, $this->user->first_name);

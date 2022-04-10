@@ -8,7 +8,8 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected string $baseUrl = 'http://chatter.test:8082';
+    protected string $baseUrl = 'http://chatter.test';
+
     protected string $apiBaseUrl;
 
     public function setup(): void

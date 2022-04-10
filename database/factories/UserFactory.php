@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -13,7 +12,6 @@ class UserFactory extends Factory
      *
      * @return array
      */
-
     public function definition()
     {
         return [
@@ -21,7 +19,7 @@ class UserFactory extends Factory
             'last_name'     => $this->faker->name(),
             'email_address' => $this->faker->unique()->safeEmail,
             'phone_number'  => Str::random(11),
-            'password'      => bcrypt('12345678')
+            'password'      => bcrypt('12345678'),
         ];
     }
 }

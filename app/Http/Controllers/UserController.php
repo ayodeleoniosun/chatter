@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
@@ -25,14 +26,15 @@ class UserController extends Controller
     {
         try {
             $data = $this->userService->index();
+
             return response()->json([
-                "status" => "success",
-                "data"   => $data
+                'status' => 'success',
+                'data'   => $data,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -43,13 +45,13 @@ class UserController extends Controller
             $data = $this->userService->profile($request->user()->id);
 
             return response()->json([
-                "status" => "success",
-                "data"   => $data
+                'status' => 'success',
+                'data'   => $data,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -58,15 +60,16 @@ class UserController extends Controller
     {
         try {
             $data = $this->userService->updateProfile($request->all(), $request->user()->id);
+
             return response()->json([
-                "status"  => "success",
-                "message" => "Profile successfully updated",
-                "data"    => $data
+                'status'  => 'success',
+                'message' => 'Profile successfully updated',
+                'data'    => $data,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -75,15 +78,16 @@ class UserController extends Controller
     {
         try {
             $data = $this->userService->updateProfilePicture($request->image, $request->user()->id);
+
             return response()->json([
-                "status"  => "success",
-                "message" => "Profile picture successfully updated",
-                "data"    => $data
+                'status'  => 'success',
+                'message' => 'Profile picture successfully updated',
+                'data'    => $data,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -92,14 +96,15 @@ class UserController extends Controller
     {
         try {
             $this->userService->updatePassword($request->all(), $request->user()->id);
+
             return response()->json([
-                "status"  => "success",
-                "message" => "Password successfully updated"
+                'status'  => 'success',
+                'message' => 'Password successfully updated',
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -110,13 +115,13 @@ class UserController extends Controller
             $this->userService->inviteUser($request->invitee, $request->user());
 
             return response()->json([
-                "status"  => "success",
-                "message" => "Invitation successfully sent to user"
+                'status'  => 'success',
+                'message' => 'Invitation successfully sent to user',
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
@@ -127,13 +132,13 @@ class UserController extends Controller
             $this->userService->logout($request->user());
 
             return response()->json([
-                "status"  => "success",
-                "message" => "Logged out successfully"
+                'status'  => 'success',
+                'message' => 'Logged out successfully',
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "status"  => "error",
-                "message" => $e->getMessage()
+                'status'  => 'error',
+                'message' => $e->getMessage(),
             ], $e->getStatusCode());
         }
     }
