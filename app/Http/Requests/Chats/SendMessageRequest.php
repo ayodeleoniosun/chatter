@@ -24,8 +24,16 @@ class SendMessageRequest extends FormRequest
     public function rules()
     {
         return [
-            'message'      => 'required|string',
-            'recipient_id' => 'required|exists:users,id'
+            'message'      => 'required_without:attachment|string',
+            'recipient_id' => 'required|exists:users,id',
+            'attachment'   => 'sometimes|mimes:jpg,png,pdf,xls,xlsx,ppt,doc,docx,mp3,flv,avi,mp4'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'attachment.mimes' => 'Invalid file'
         ];
     }
 }

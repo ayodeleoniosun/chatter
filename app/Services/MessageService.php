@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Repositories\ConversationRepository;
 use App\Repositories\MessageRepository;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Storage;
 
 class MessageService
 {
@@ -39,6 +40,15 @@ class MessageService
         }
 
         $data['sender_id'] = $sender->id;
+
+        $attachment = $data['attachment'] ?? null;
+
+        if ($attachment) {
+            $filename = $sender->id . '' . time() . '.' . $attachment->extension();
+            Storage::disk('attachments')->put($filename, file_get_contents($attachment->getRealPath()));
+            $data['attachment'] = Storage::disk('attachments')->url($filename);
+        }
+
         broadcast(new MessageSent($data));
         SaveMessage::dispatch($data, $this->messageRepository);
     }

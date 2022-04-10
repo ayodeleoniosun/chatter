@@ -19,4 +19,9 @@ class File extends Model
     {
         return $this->hasMany(UserProfilePicture::class, 'file_id');
     }
+
+    public function messages(): HasOne
+    {
+        return $this->hasOne(Message::class, 'attachment_id');
+    }
 }

@@ -1,4 +1,4 @@
-name: Chatter
+name: Chatter CI
 
 on:
   push:
@@ -44,6 +44,7 @@ jobs:
         run: |
           php -r "file_exists('.env') || copy('.env.example', '.env');"
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          npm install
           php artisan key:generate
           chmod -R 777 storage bootstrap/cache
           php artisan storage:link

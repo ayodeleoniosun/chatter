@@ -18,12 +18,22 @@ class MessageRepository
 
     public function save(array $data): Message
     {
+        $attachment = $data['attachment'] ?? null;
+        $file = null;
+
+        if ($attachment) {
+            $file = app(FileRepository::class)->create([
+                'path' => $data['attachment']
+            ]);
+        }
+
         $conversation = app(ConversationRepository::class)->getOrCreateConversation($data);
 
         return $this->message->create([
             'conversation_id' => $conversation->id,
             'sender_id'       => $data['sender_id'],
             'message'         => $data['message'],
+            'attachment_id'   => $file?->id
         ]);
     }
 

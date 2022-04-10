@@ -21,4 +21,9 @@ class Message extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function attachment(): BelongsTo
+    {
+        return $this->belongsTo(File::class);
+    }
 }

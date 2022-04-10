@@ -53,7 +53,7 @@ class UserService
     public function updateProfilePicture(object $image, int $userId): UserResource
     {
         $extension = $image->extension();
-        $filename = $userId . '' . time() . ' . ' . $extension;
+        $filename = $userId . '' . time() . '.' . $extension;
 
         Storage::disk('profile_pictures')->put($filename, file_get_contents($image->getRealPath()));
 
