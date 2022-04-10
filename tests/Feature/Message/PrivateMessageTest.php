@@ -233,11 +233,11 @@ class PrivateMessageTest extends TestCase
 
     private function sendMessage($recipient = null, $attachment = false): TestResponse
     {
-        if (is_null($recipient)) {
+        if ($recipient) {
+            $recipientUser = $recipient;
+        } else {
             $this->authUser();
             $recipientUser = $this->createUser();
-        } else {
-            $recipientUser = $recipient;
         }
 
         $file = null;
